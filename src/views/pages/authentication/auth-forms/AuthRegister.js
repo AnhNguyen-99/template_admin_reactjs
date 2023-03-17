@@ -30,6 +30,8 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { register } from 'services/AuthService';
+import { showNotification } from 'services/NotificationService';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
@@ -55,6 +57,18 @@ const FirebaseRegister = ({ ...others }) => {
         setStrength(temp);
         setLevel(strengthColor(temp));
     };
+
+    const submit = (username, email, password) => {
+        register(username, email, password)
+            .then(response => {
+                showNotification('Register success', 'success');
+                console.log(response.user);
+                window.location.replace("/pages/login")
+            }).catch(error => {
+                console.log(error)
+                showNotification(error?.detail !== null ? error.detail : 'Register fail', 'danger');
+            });
+    }
 
     useEffect(() => {
         changePassword('123456');
@@ -87,6 +101,7 @@ const FirebaseRegister = ({ ...others }) => {
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
+                            submit(values.username, values.email, values.password);
                         }
                     } catch (err) {
                         console.error(err);

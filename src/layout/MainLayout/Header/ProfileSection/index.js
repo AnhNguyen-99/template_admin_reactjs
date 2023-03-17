@@ -60,6 +60,9 @@ const ProfileSection = () => {
      */
     const handleLogout = async () => {
         console.log('Logout');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('currentUser');
+        window.location.replace('/pages/login')
     };
 
     const handleClose = (event) => {
@@ -160,10 +163,10 @@ const ProfileSection = () => {
                                     <Box sx={{ p: 2 }}>
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h4">Xin chào,</Typography>
+                                                <Typography variant="h4">Hi,</Typography>
                                                 {/* Xử lý tên người dùng lấy trong localStorge*/}
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    Lê Anh
+                                                    Admin
                                                 </Typography>
                                             </Stack>
                                         </Stack>
