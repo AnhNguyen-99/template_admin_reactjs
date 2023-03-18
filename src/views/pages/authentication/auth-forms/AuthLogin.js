@@ -86,7 +86,7 @@ const FirebaseLogin = ({ ...others }) => {
                 }}
                 validationSchema={Yup.object().shape({
                     username: Yup.string().max(255).required('Username is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    password: Yup.string().max(100).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
