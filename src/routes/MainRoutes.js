@@ -17,6 +17,7 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const ManageCategory = Loadable(lazy(() => import('views/manages/category/ListCategory')))
+const ManageRole = Loadable(lazy(() => import('views/manages/role/ListRole')))
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -87,8 +88,17 @@ const MainRoutes = {
             element: <SamplePage />
         },
         {
-            path: 'manage/category',
-            element: <ManageCategory/>
+            path: 'manage',
+            children: [
+                {
+                    path: 'category',
+                    element: <ManageCategory/>
+                },
+                {
+                    path: 'role',
+                    element: <ManageRole/>
+                }
+            ]
         }
     ]
 };

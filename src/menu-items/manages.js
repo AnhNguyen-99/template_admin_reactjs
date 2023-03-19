@@ -32,9 +32,9 @@ const manages = {
         },
         {
             id: 'util-shadow',
-            title: 'Shadow',
+            title: 'Manage Role',
             type: 'item',
-            url: '/utils/util-shadow',
+            url: '/manage/role',
             icon: icons.IconShadow,
             breadcrumbs: false
         },

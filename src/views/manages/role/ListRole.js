@@ -7,13 +7,13 @@ import { gridSpacing } from 'store/constant';
 import { useState } from 'react';
 
 import Popup from 'ui-component/Popup';
-import FormCategory from './FormCategory';
 import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
+import FormRole from './FormRole';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -29,24 +29,32 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageCategory = () => {
+const ManageRole = () => {
     
     const classes = useStyles();
 
     const data = [
         {
             'id': 1,
-            'categoryName': 'Danh mục 1'
+            'roleName': 'Admin'
         },
         {
             'id': 2,
-            'categoryName': 'Danh mục 2'
+            'roleName': 'Manages'
+        },
+        {
+            'id': 3,
+            'roleName': 'Employee'
+        },
+        {
+            'id': 4,
+            'roleName': 'User'
         }
     ]
 
     const headCells = [
-        { id: 'id', label: 'CategoryID' },
-        { id: 'categoryName', label: 'CategoryName' },
+        { id: 'id', label: 'RoleID' },
+        { id: 'roleName', label: 'RoleName' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -92,10 +100,10 @@ const ManageCategory = () => {
 
     return (
         <>
-            <MainCard title="List Category">
+            <MainCard title="List Role">
                 <Toolbar>
                     <Controls.Input
-                        label="Search"
+                        label="Search Role"
                         className={classes.searchInput}
                         placeholder= "Search ...."
                         InputProps={{
@@ -123,7 +131,7 @@ const ManageCategory = () => {
                                     recordsAfterPagingAndSorting().map(item =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{item.id}</TableCell>
-                                        <TableCell>{item.categoryName}</TableCell>
+                                        <TableCell>{item.roleName}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
@@ -145,12 +153,12 @@ const ManageCategory = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Category" openPopup={open} setOpenPopup={setOpen}>
-                <FormCategory recordForEdit={recordForEdit}
+            <Popup title="Create Role" openPopup={open} setOpenPopup={setOpen}>
+                <FormRole recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageCategory;
+export default ManageRole;
