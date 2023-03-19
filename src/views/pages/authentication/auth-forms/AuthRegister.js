@@ -63,7 +63,7 @@ const FirebaseRegister = ({ ...others }) => {
             .then(response => {
                 showNotification('Register success', 'success');
                 console.log(response.user);
-                window.location.replace("/pages/login")
+                window.location.replace("/admin/login")
             }).catch(error => {
                 console.log(error)
                 showNotification(error?.detail !== null ? error.detail : 'Register fail', 'danger');
@@ -76,13 +76,13 @@ const FirebaseRegister = ({ ...others }) => {
 
     return (
         <>
-            <Grid container direction="column" justifyContent="center" spacing={2}>
+            {/* <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">Sign up with Email address</Typography>
                     </Box>
                 </Grid>
-            </Grid>
+            </Grid> */}
 
             <Formik
                 initialValues={{
@@ -94,7 +94,7 @@ const FirebaseRegister = ({ ...others }) => {
                 validationSchema={Yup.object().shape({
                     username: Yup.string().max(255).required('Username is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    password: Yup.string().max(100).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
