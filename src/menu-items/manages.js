@@ -31,10 +31,18 @@ const manages = {
             breadcrumbs: false
         },
         {
-            id: 'util-shadow',
+            id: 'manage_role',
             title: 'Manage Role',
             type: 'item',
             url: '/manage/role',
+            icon: icons.IconShadow,
+            breadcrumbs: false
+        },
+        {
+            id: 'manage_function',
+            title: 'Manage Function',
+            type: 'item',
+            url: '/manage/function',
             icon: icons.IconShadow,
             breadcrumbs: false
         },

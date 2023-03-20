@@ -11,10 +11,9 @@ import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
-import { IconEdit, IconTrash, IconSearch, IconApps, IconAlignRight } from '@tabler/icons';
+import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
-import FormRole from './FormRole';
-import FormFunctionRole from './FormFunctionRole';
+import FormFunction from './FormFunction';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -30,53 +29,44 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageRole = () => {
-
+const ManageFunction = () => {
+    
     const classes = useStyles();
 
     const data = [
         {
             'id': 1,
-            'roleName': 'Admin'
+            'nameFunction': 'Manage Category'
         },
         {
             'id': 2,
-            'roleName': 'Manages'
+            'nameFunction': 'Manage Role'
         },
         {
             'id': 3,
-            'roleName': 'Employee'
+            'nameFunction': 'Manage Function'
         },
         {
             'id': 4,
-            'roleName': 'User'
+            'nameFunction': 'Manage Branch'
         }
     ]
 
     const headCells = [
-        { id: 'id', label: 'RoleID' },
-        { id: 'roleName', label: 'RoleName' },
+        { id: 'id', label: 'FunctionID' },
+        { id: 'nameFunction', label: 'NameFunction' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
     const [open, setOpen] = useState(false);
-    const [openAddFunction, setOpenAddFunction] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState(data)
 
-    const addOrEdit = (role, resetForm) => {
-        console.log(role);
+    const addOrEdit = (functions, resetForm) => {
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
-    }
-
-    const addFunctionRole = (role, resetForm) => {
-        console.log(role)
-        resetForm()
-        setRecordForEdit(null)
-        setOpenAddFunction(false)
     }
 
     const {
@@ -90,11 +80,6 @@ const ManageRole = () => {
         console.log(item);
         setRecordForEdit(item);
         setOpen(true);
-    }
-
-    const openInPopupFunction = (item) => {
-        setRecordForEdit(item);
-        setOpenAddFunction(true);
     }
 
     const handleSearch = (e) => {
@@ -114,12 +99,12 @@ const ManageRole = () => {
 
     return (
         <>
-            <MainCard title="List Role">
+            <MainCard title="List Function">
                 <Toolbar>
                     <Controls.Input
-                        label="Search Role"
+                        label="Search"
                         className={classes.searchInput}
-                        placeholder="Search ...."
+                        placeholder= "Search ...."
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
                                 <IconSearch />
@@ -145,18 +130,12 @@ const ManageRole = () => {
                                     recordsAfterPagingAndSorting().map(item =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{item.id}</TableCell>
-                                        <TableCell>{item.roleName}</TableCell>
+                                        <TableCell>{item.nameFunction}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
-                                                onClick={() => { openInPopupFunction(item) }}
-                                            >
-                                                <IconAlignRight />
-                                            </Controls.ActionButton>
-                                            <Controls.ActionButton
-                                                color="primary"
                                                 onClick={() => { openInPopup(item) }}
-                                            >
+                                                >
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
@@ -173,17 +152,12 @@ const ManageRole = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Role" openPopup={open} setOpenPopup={setOpen}>
-                <FormRole recordForEdit={recordForEdit}
+            <Popup title="Create Function" openPopup={open} setOpenPopup={setOpen}>
+                <FormFunction recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
-            </Popup>
-
-            <Popup title="Add Function" openPopup={openAddFunction} setOpenPopup={setOpenAddFunction}>
-                <FormFunctionRole recordForEdit={recordForEdit}
-                    addOrEdit={addFunctionRole} />
             </Popup>
         </>
     );
 };
 
-export default ManageRole;
+export default ManageFunction;

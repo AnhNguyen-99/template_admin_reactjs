@@ -3,17 +3,17 @@ import { Grid } from '@mui/material';
 import { useForm, Form } from 'ui-component/useForm';
 import Controls from 'ui-component/controls/Controls';
 
-const FormRole = (props) => {
+const FormFunction = (props) => {
     
     const initialFValues = {
-        roleName: ''
+        nameFunction: ''
     }
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('roleName' in fieldValues)
-            temp.roleName = fieldValues.roleName ? "" : "This field is required."
+        if ('nameFunction' in fieldValues)
+            temp.nameFunction = fieldValues.nameFunction ? "" : "This field is required."
 
         setErrors({
             ...temp
@@ -47,15 +47,15 @@ const FormRole = (props) => {
     }, [recordForEdit])
 
     return (
-        <Form onSubmit={handleSubmit} style={{width: '500px'}}>
+        <Form onSubmit={handleSubmit}>
             <Grid container style={{width: '500px'}}>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
                     <Controls.Input
-                        name="roleName"
-                        label="RoleName"
-                        value={values.roleName}
+                        name="nameFunction"
+                        label="NameFunction"
+                        value={values.nameFunction}
                         onChange={handleInputChange}
-                        error={errors.roleName}
+                        error={errors.nameFunction}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>
@@ -70,4 +70,4 @@ const FormRole = (props) => {
     )
 };
 
-export default FormRole;
+export default FormFunction;
