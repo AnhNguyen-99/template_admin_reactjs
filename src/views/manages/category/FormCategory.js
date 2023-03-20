@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import { Grid } from '@mui/material';
 import { useForm, Form } from 'ui-component/useForm';
 import Controls from 'ui-component/controls/Controls';
+import { createCategory, updateCategory, deleteCategory } from 'services/ProductService';
+import { createSub, updateSub, deleteSub } from 'services/ProductService';
+import { showNotification } from 'services/NotificationService';
 
 const FormCategory = (props) => {
     
@@ -38,6 +41,8 @@ const FormCategory = (props) => {
         if (validate()) {
             addOrEdit(values, resetForm);
         }
+        
+        console.log(values);
     }
 
     useEffect(() => {
