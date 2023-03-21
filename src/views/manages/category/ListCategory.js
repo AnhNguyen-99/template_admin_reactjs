@@ -35,27 +35,28 @@ const ManageCategory = () => {
     
     const classes = useStyles();
 
-    const data = [
-        {
-            'id': 1,
-            'categoryName': 'Danh mục 1'
-        },
-        {
-            'id': 2,
-            'categoryName': 'Danh mục 2'
-        }
-    ]
+    // const data = [
+    //     {
+    //         'id': 1,
+    //         'categoryName': 'Danh mục 1'
+    //     },
+    //     {
+    //         'id': 2,
+    //         'categoryName': 'Danh mục 2'
+    //     }
+    // ]
 
     const headCells = [
-        { id: 'id', label: 'CategoryID' },
+        { id: 'id', label: 'STT' },
         { id: 'categoryName', label: 'CategoryName' },
+        { id: 'subCategory', label: 'SubCategory'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
     const [open, setOpen] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [records, setRecords] = useState(data)
+    const [records, setRecords] = useState([])
 
     const addOrEdit = (category, resetForm) => {
         console.log(category);
@@ -99,7 +100,7 @@ const ManageCategory = () => {
         }).catch(error => {
             console.log(error)
         });
-    })
+    }, [])
 
     return (
         <>
@@ -131,10 +132,11 @@ const ManageCategory = () => {
                             <TblHead />
                             <TableBody>
                                 {
-                                    recordsAfterPagingAndSorting().map(item =>
+                                    recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
-                                        <TableCell>{item.id}</TableCell>
-                                        <TableCell>{item.categoryName}</TableCell>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{item.category_name}</TableCell>
+                                        <TableCell>{item.sub_category}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

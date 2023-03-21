@@ -55,7 +55,7 @@ const ManageFunction = () => {
     ]
 
     const headCells = [
-        { id: 'id', label: 'FunctionID' },
+        { id: 'id', label: 'STT' },
         { id: 'nameFunction', label: 'NameFunction' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
@@ -103,11 +103,11 @@ const ManageFunction = () => {
         promise = getListFunction()
         .then(response => {
             setRecords(response);
-            return;
+            // return;
         }).catch(error => {
             console.log(error)
         });
-    })
+    }, []);
 
 
     return (
@@ -140,10 +140,10 @@ const ManageFunction = () => {
                             <TblHead />
                             <TableBody>
                                 {
-                                    recordsAfterPagingAndSorting().map(item =>
+                                    recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
-                                        <TableCell>{item.id}</TableCell>
-                                        <TableCell>{item.nameFunction}</TableCell>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{item.name_function}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

@@ -1,7 +1,6 @@
 const { API_BASE_URL } = require("env")
 
 const API_BASE_CATEGORY = API_BASE_URL + "product/";
-const API_BASE_SUBCATEGORY = API_BASE_URL + "product/"
 
 const request = (options) => {
     const headers = new Headers({
@@ -31,6 +30,7 @@ const request = (options) => {
 export function createCategory(category) {
     var raw = JSON.stringify({
         "category_name": category.category_name,
+        "sub_category": category.sub_category,
         "create_id": 1,
         "update_id": 1
     });
@@ -64,6 +64,7 @@ export function deleteCategory(id) {
 export function updateCategory(category, id) {
     var raw = JSON.stringify({
         'category_name': category.category_name,
+        'sub_category': category.sub_category,
         'create_id': 1,
         'update_id': 1,
     });
@@ -77,44 +78,3 @@ export function updateCategory(category, id) {
 }
 
 // ================================================
-
-// ================================================
-// =========== SUB CATEGORY =======================
-
-// Tạo mới một thư mục con
-export function createSub(subcategory) {
-    var raw = JSON.stringify({
-        "sub_category": subcategory.sub_category
-    });
-
-    return request({
-        url: API_BASE_SUBCATEGORY + "create-sub",
-        method: 'POST',
-        body: raw,
-        redirect: 'follow'
-    });
-}
-
-// Cập nhật danh mục con
-export function updateSub(subcategory, id) {
-    var raw = JSON.stringify({
-        "sub_category": subcategory.sub_category
-    });
-
-    return request({
-        url: API_BASE_SUBCATEGORY + "update-sub/" + id,
-        method: 'PUT',
-        body: raw,
-        redirect: 'follow'
-    });
-}
-
-export function deleteSub(id) {
-    
-    return request({
-        url: API_BASE_SUBCATEGORY + "delete-sub/" + id,
-        method: 'DELETE',
-        redirect: 'follow' 
-    });
-}
-

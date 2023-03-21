@@ -15,6 +15,8 @@ import { IconEdit, IconTrash, IconSearch, IconApps, IconAlignRight } from '@tabl
 import AddIcon from '@mui/icons-material/Add';
 import FormRole from './FormRole';
 import FormFunctionRole from './FormFunctionRole';
+import { useEffect } from 'react';
+import { getListRole } from 'services/AccountService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -54,7 +56,7 @@ const ManageRole = () => {
     ]
 
     const headCells = [
-        { id: 'id', label: 'RoleID' },
+        { id: 'id', label: 'STT' },
         { id: 'roleName', label: 'RoleName' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
@@ -63,7 +65,7 @@ const ManageRole = () => {
     const [openAddFunction, setOpenAddFunction] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [records, setRecords] = useState(data)
+    const [records, setRecords] = useState([])
 
     const addOrEdit = (role, resetForm) => {
         console.log(role);
@@ -111,6 +113,16 @@ const ManageRole = () => {
         // Code tìm kiếm 
     }
 
+    useEffect(() => {
+        let promise;
+        promise = getListRole()
+        .then(response => {
+            setRecords(response);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }, []);
 
     return (
         <>
@@ -142,10 +154,10 @@ const ManageRole = () => {
                             <TblHead />
                             <TableBody>
                                 {
-                                    recordsAfterPagingAndSorting().map(item =>
+                                    recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
-                                        <TableCell>{item.id}</TableCell>
-                                        <TableCell>{item.roleName}</TableCell>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{item.role_name}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

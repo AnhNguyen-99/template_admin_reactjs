@@ -28,3 +28,10 @@ export function getListFunction() {
         method: 'GET'
     });
 }
+
+export function getListRole() {
+    return request({
+        url: API_URL_ACC + "list-role",
+        method: 'GET'
+    });
+}
