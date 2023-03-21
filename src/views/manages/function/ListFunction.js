@@ -14,6 +14,8 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import FormFunction from './FormFunction';
+import { useEffect } from 'react';
+import { getListFunction } from 'services/AccountService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -61,7 +63,7 @@ const ManageFunction = () => {
     const [open, setOpen] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [records, setRecords] = useState(data)
+    const [records, setRecords] = useState([])
 
     const addOrEdit = (functions, resetForm) => {
         resetForm()
@@ -95,6 +97,17 @@ const ManageFunction = () => {
         // })
         // Code tìm kiếm 
     }
+
+    useEffect(() => {
+        let promise;
+        promise = getListFunction()
+        .then(response => {
+            setRecords(response);
+            return;
+        }).catch(error => {
+            console.log(error)
+        });
+    })
 
 
     return (

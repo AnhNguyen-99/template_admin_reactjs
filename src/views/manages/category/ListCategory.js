@@ -14,6 +14,8 @@ import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
+import { useEffect } from 'react';
+import { getlistCategory } from 'services/ProductService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -89,6 +91,15 @@ const ManageCategory = () => {
         // Code tìm kiếm 
     }
 
+    useEffect(() => {
+        let promise;
+        promise = getlistCategory()
+        .then (response => {
+            setRecords(response);
+        }).catch(error => {
+            console.log(error)
+        });
+    })
 
     return (
         <>
