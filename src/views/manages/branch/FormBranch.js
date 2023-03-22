@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react'
-import { Grid } from '@mui/material';
-import { useForm, Form } from 'ui-component/useForm';
-import Controls from 'ui-component/controls/Controls';
+import React, { useEffect } from "react";
+import { Grid } from "@mui/material";
+import { useForm, Form } from "ui-component/useForm";
+import Controls from "ui-component/controls/Controls";
 
-const FormCategory = (props) => {
-    
+
+const FormBranch = (props) => {
+
     const initialFValues = {
-        category_name: '',
-        sub_category: ''
+        branch_name: ''
     }
-    const { addOrEdit, recordForEdit } = props
+
+    const { addOrEdit, recordForEdit} = props
 
     const validate = (fieldValues = values) => {
-        let temp = { ...errors }
-        if ('category_name' in fieldValues)
-            temp.category_name = fieldValues.category_name ? "" : "This field is required."
+        let temp = { ...errors}
+        if ('branch_name' in fieldValues)
+            temp.branch_name = fieldValues.branch_name ? "" : "This fields is required."
 
         setErrors({
             ...temp
@@ -49,33 +50,27 @@ const FormCategory = (props) => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container>
+            <Grid container style={{width: '500px'}}>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
                     <Controls.Input
-                        name="category_name"
-                        label="CategoryName"
-                        value={values.category_name}
+                        name="branch_name"
+                        label="BranchName"
+                        value={values.branch_name}
                         onChange={handleInputChange}
-                        error={errors.category_name}
-                    />
-                    <Controls.Input
-                        label="SubCategory"
-                        name="sub_category"
-                        value={values.sub_category}
-                        onChange={handleInputChange}
-                        error={errors.sub_category}
+                        error={errors.branch_name}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>
                     <div>
-                        <Controls.Button
+                        <Controls.Button 
                             type="submit"
-                            text="Save" />
+                            text="Save"
+                        />
                     </div>
                 </Grid>
             </Grid>
         </Form>
     )
-};
+}
 
-export default FormCategory;
+export default FormBranch;

@@ -7,7 +7,6 @@ import { gridSpacing } from 'store/constant';
 import { useState } from 'react';
 
 import Popup from 'ui-component/Popup';
-import FormCategory from './FormCategory';
 import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
@@ -15,8 +14,9 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import { createCategory, deleteCategory, getlistCategory, updateCategory } from 'services/ProductService';
+import FormSupplier from './FormSupplier';
 import { showNotification } from 'services/NotificationService';
+import { getListSupplier, createSupplier, deleteSupplier, updateSupplier } from 'services/ProductService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,25 +32,17 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageCategory = () => {
-    
-    const classes = useStyles();
+const ManageSupplier = () => {
 
-    // const data = [
-    //     {
-    //         'id': 1,
-    //         'categoryName': 'Danh mục 1'
-    //     },
-    //     {
-    //         'id': 2,
-    //         'categoryName': 'Danh mục 2'
-    //     }
-    // ]
+    const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'categoryName', label: 'CategoryName' },
-        { id: 'subCategory', label: 'SubCategory'},
+        { id: 'nameSupplier', label: 'NameSupplier' },
+        { id: 'codeTax', label: 'CodeTax'},
+        { id: 'email', label: 'Email'},
+        { id: 'phone', label: 'Phone'},
+        { id: 'address', label: 'Address'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -59,27 +51,25 @@ const ManageCategory = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (category, resetForm) => {
-        if (category.id) {
-            updateCategory(category).then(response => {
+    const addOrEdit = (supplier, resetForm) => {
+        if (supplier.id) {
+            updateSupplier(supplier).then(response => {
                 if (response !== null) {
-                    showNotification("Update Category Success", 'success');
+                    showNotification("Update Supplier Success", 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Category Fail", 'danger')
+                showNotification("Update Supplier Fail", 'danger');
             })
         } else {
-            // Thêm mới category
-            createCategory(category)
+            createSupplier(supplier)
             .then(response => {
-                showNotification('Create Category Success', 'success');
+                showNotification("Create Supplier Success", 'success');
                 getData();
             }).catch(error => {
-                showNotification('Create Category Fail', 'danger');
+                showNotification("Create Supplier Fail", 'danger');
             });
         }
-
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
@@ -106,12 +96,11 @@ const ManageCategory = () => {
                     console.log(items);
                     return items;
                 }
-                else {
-                    return items.filter(x => x.category_name.toLowerCase().includes(target.value.toLowerCase()))
+                else{
+                    return items.filter(x => x.supplier_name.toLowerCase().includes(target.value.toLowerCase()))
                 }
             }
         })
-        // Code tìm kiếm 
     }
 
     useEffect(() => {
@@ -119,36 +108,34 @@ const ManageCategory = () => {
     }, [])
 
     const getData = () => {
-        let promise;
-        promise = getlistCategory()
+        getListSupplier()
             .then(response => {
                 setRecords(response);
-            })
-            .catch(error => {
-                console.log(error);
+            }).catch(error => {
+                console.log(error)
             });
-    }
+    };
 
-    const deleteCategorys = (item) => {
-        deleteCategory(item).then(response => {
+    const deleteSuppliers = (item) => {
+        deleteSupplier(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Category Success", 'success');
+                showNotification("Delete Supplier Success", 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification('Delete Category Success', 'danger');
+            showNotification("Delete Supplier Fail", 'danger');
         });
     }
 
     return (
         <>
-            <MainCard title="List Category">
+            <MainCard title="List Supplier">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
                         className={classes.searchInput}
-                        placeholder= "Search ...."
+                        placeholder="Search ...."
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
                                 <IconSearch />
@@ -174,18 +161,22 @@ const ManageCategory = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.category_name}</TableCell>
-                                        <TableCell>{item.sub_category}</TableCell>
+                                        <TableCell>{item.supplier_name}</TableCell>
+                                        <TableCell>{item.code_tax}</TableCell>
+                                        <TableCell>{item.email}</TableCell>
+                                        <TableCell>{item.phone}</TableCell>
+                                        <TableCell>{item.address}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
                                                 onClick={() => { openInPopup(item) }}
-                                                >
+                                            >
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick={() => {deleteCategorys(item) }}>
+                                                onClick = {() => { deleteSuppliers(item) }}
+                                            >
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
@@ -198,12 +189,12 @@ const ManageCategory = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Category" openPopup={open} setOpenPopup={setOpen}>
-                <FormCategory recordForEdit={recordForEdit}
+            <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
+                <FormSupplier recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageCategory;
+export default ManageSupplier;

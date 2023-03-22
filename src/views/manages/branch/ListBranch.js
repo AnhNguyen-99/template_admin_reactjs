@@ -7,16 +7,16 @@ import { gridSpacing } from 'store/constant';
 import { useState } from 'react';
 
 import Popup from 'ui-component/Popup';
-import FormCategory from './FormCategory';
 import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
+import FormBranch from './FormBranch';
 import { useEffect } from 'react';
-import { createCategory, deleteCategory, getlistCategory, updateCategory } from 'services/ProductService';
 import { showNotification } from 'services/NotificationService';
+import { createBranch, getListBranch, updateBranch, deleteBranch } from 'services/ProductService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,25 +32,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageCategory = () => {
-    
-    const classes = useStyles();
+const ManageBranch = () => {
 
-    // const data = [
-    //     {
-    //         'id': 1,
-    //         'categoryName': 'Danh mục 1'
-    //     },
-    //     {
-    //         'id': 2,
-    //         'categoryName': 'Danh mục 2'
-    //     }
-    // ]
+    const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'categoryName', label: 'CategoryName' },
-        { id: 'subCategory', label: 'SubCategory'},
+        { id: 'nameBranch', label: 'NameBranch' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -59,27 +47,28 @@ const ManageCategory = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (category, resetForm) => {
-        if (category.id) {
-            updateCategory(category).then(response => {
+    const addOrEdit = (branch, resetForm) => {
+        if (branch.id) {
+            // Update branch
+            updateBranch(branch).then(response => {
                 if (response !== null) {
-                    showNotification("Update Category Success", 'success');
+                    showNotification('Update Branch Success', 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Category Fail", 'danger')
-            })
+                showNotification('Update Branch Fail', 'danger');
+            });
         } else {
-            // Thêm mới category
-            createCategory(category)
-            .then(response => {
-                showNotification('Create Category Success', 'success');
-                getData();
+            // Thêm mới branch
+            createBranch(branch.branch_name).then(response => {
+                if (response !== null) {
+                    showNotification('Create Branch Success', 'success');
+                    getData();
+                }
             }).catch(error => {
-                showNotification('Create Category Fail', 'danger');
+                showNotification('Create Branch Fail', 'danger');
             });
         }
-
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
@@ -106,12 +95,10 @@ const ManageCategory = () => {
                     console.log(items);
                     return items;
                 }
-                else {
-                    return items.filter(x => x.category_name.toLowerCase().includes(target.value.toLowerCase()))
-                }
+                else
+                    return items.filter(x => x.branch_name.toLowerCase().includes(target.value.toLowerCase()))
             }
         })
-        // Code tìm kiếm 
     }
 
     useEffect(() => {
@@ -119,36 +106,35 @@ const ManageCategory = () => {
     }, [])
 
     const getData = () => {
-        let promise;
-        promise = getlistCategory()
+        getListBranch()
             .then(response => {
                 setRecords(response);
-            })
-            .catch(error => {
-                console.log(error);
+            }).catch(error => {
+                console.log(error)
             });
-    }
+    };
 
-    const deleteCategorys = (item) => {
-        deleteCategory(item).then(response => {
+    const deleteBranchs = (item) => {
+        deleteBranch(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Category Success", 'success');
+                showNotification('Delete Branch Success', 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification('Delete Category Success', 'danger');
+            showNotification('Delete Branch Fail', 'danger');
         });
     }
 
+
     return (
         <>
-            <MainCard title="List Category">
+            <MainCard title="List Branch">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
                         className={classes.searchInput}
-                        placeholder= "Search ...."
+                        placeholder="Search ...."
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
                                 <IconSearch />
@@ -174,18 +160,17 @@ const ManageCategory = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.category_name}</TableCell>
-                                        <TableCell>{item.sub_category}</TableCell>
+                                        <TableCell>{item.branch_name}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
                                                 onClick={() => { openInPopup(item) }}
-                                                >
+                                            >
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick={() => {deleteCategorys(item) }}>
+                                                onClick={() => { deleteBranchs(item) }}>
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
@@ -198,12 +183,12 @@ const ManageCategory = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Category" openPopup={open} setOpenPopup={setOpen}>
-                <FormCategory recordForEdit={recordForEdit}
+            <Popup title="Create Branch" openPopup={open} setOpenPopup={setOpen}>
+                <FormBranch recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageCategory;
+export default ManageBranch;

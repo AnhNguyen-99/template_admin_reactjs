@@ -1,4 +1,12 @@
-import { IconTypography, IconPalette, IconShadow, IconWindmill, IconApps } from '@tabler/icons';
+import { 
+    IconTypography, 
+    IconPalette, 
+    IconShadow, 
+    IconWindmill, 
+    IconApps,
+    IconBox,
+    IconBriefcase  
+} from '@tabler/icons';
 
 // constant
 const icons = {
@@ -6,7 +14,9 @@ const icons = {
     IconPalette,
     IconShadow,
     IconWindmill,
-    IconApps
+    IconApps,
+    IconBox,
+    IconBriefcase
 };
 
 const manages = {
@@ -26,8 +36,8 @@ const manages = {
             id: 'manage_branch',
             title: 'Manage Branch',
             type: 'item',
-            url: '/utils/util-color',
-            icon: icons.IconPalette,
+            url: '/manage/branch',
+            icon: icons.IconBox,
             breadcrumbs: false
         },
         {
@@ -46,7 +56,14 @@ const manages = {
             icon: icons.IconShadow,
             breadcrumbs: false
         },
-
+        {
+            id: 'manage_supplier',
+            title: 'Manage Supplier',
+            type: 'item',
+            url: '/manage/supplier',
+            icon: icons.IconBriefcase,
+            breadcrumbs: false
+        },
     ]
 };
 

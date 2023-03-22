@@ -19,6 +19,8 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const ManageCategory = Loadable(lazy(() => import('views/manages/category/ListCategory')));
 const ManageRole = Loadable(lazy(() => import('views/manages/role/ListRole')));
 const ManageFunction = Loadable(lazy(() => import('views/manages/function/ListFunction')));
+const ManageBranch = Loadable(lazy(() => import('views/manages/branch/ListBranch')));
+const ManageSupplier = Loadable(lazy(() => import('views/manages/supplier/ListSupplier')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -96,12 +98,20 @@ const MainRoutes = {
                     element: <ManageCategory/>
                 },
                 {
+                    path: 'branch',
+                    element: <ManageBranch/>
+                },
+                {
                     path: 'role',
                     element: <ManageRole/>
-                },
+                }, 
                 {
                     path: 'function',
                     element: <ManageFunction/>
+                },
+                {
+                    path: 'supplier',
+                    element: <ManageSupplier/>
                 }
             ]
         }
