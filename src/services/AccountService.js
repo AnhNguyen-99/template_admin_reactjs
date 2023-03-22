@@ -61,3 +61,12 @@ export function updateFunction(functions) {
         redirect: 'follow'
     });
 }
+
+// Xóa function
+export function deleteFunction(functions){
+    return request({
+        url: API_URL_ACC + "delete-func/" + functions.id,
+        method: 'DELETE',
+        redirect: 'follow'
+    });
+}

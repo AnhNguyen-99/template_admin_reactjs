@@ -15,7 +15,7 @@ import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import FormFunction from './FormFunction';
 import { useEffect } from 'react';
-import { createFunction, getListFunction, updateFunction } from 'services/AccountService';
+import { createFunction, deleteFunction, getListFunction, updateFunction } from 'services/AccountService';
 import { showNotification } from 'services/NotificationService';
 
 const useStyles = makeStyles(theme => ({
@@ -33,27 +33,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ManageFunction = () => {
-    
-    const classes = useStyles();
 
-    const data = [
-        {
-            'id': 1,
-            'nameFunction': 'Manage Category'
-        },
-        {
-            'id': 2,
-            'nameFunction': 'Manage Role'
-        },
-        {
-            'id': 3,
-            'nameFunction': 'Manage Function'
-        },
-        {
-            'id': 4,
-            'nameFunction': 'Manage Branch'
-        }
-    ]
+    const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
@@ -63,28 +44,30 @@ const ManageFunction = () => {
 
     const [open, setOpen] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: items => {console.log(items); return items; } });
+    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
     const addOrEdit = (functions, resetForm) => {
-        if(functions.id){
+        if (functions.id) {
             // Update function
             updateFunction(functions).then(response => {
-                if(response !== null){
+                if (response !== null) {
                     showNotification('Success', 'success');
                     getData();
                 }
             }).catch(error => {
+                console.log(error);
                 showNotification('Fail', 'danger');
             });
-        }else{
+        } else {
             // Thêm mới function
             createFunction(functions.name_function).then(response => {
-                if(response !== null){
+                if (response !== null) {
                     showNotification('Success', 'success');
                     getData();
                 }
             }).catch(error => {
+                console.log(error);
                 showNotification('Fail', 'danger');
             });
         }
@@ -110,7 +93,7 @@ const ManageFunction = () => {
         let target = e.target;
         setFilterFn({
             fn: items => {
-                if (target.value == ""){
+                if (target.value == "") {
                     console.log(items);
                     return items;
                 }
@@ -121,27 +104,29 @@ const ManageFunction = () => {
     }
 
     useEffect(() => {
-        // let promise;
-        // promise = getListFunction()
-        // .then(response => {
-        //     setRecords(response);
-        //     return;
-        // }).catch(error => {
-        //     console.log(error)
-        // });
         getData();
     }, [])
 
     const getData = () => {
-        let promise;
-        promise = getListFunction()
-        .then(response => {
-            setRecords(response);
-            // return;
-        }).catch(error => {
-            console.log(error)
-        });
+        getListFunction()
+            .then(response => {
+                setRecords(response);
+            }).catch(error => {
+                console.log(error)
+            });
     };
+
+    const deleteFunctions = (item) => {
+        deleteFunction(item).then(response => {
+            if (response !== null) {
+                showNotification('Delete Success', 'success');
+                getData();
+            }
+        }).catch(error => {
+            console.log(error);
+            showNotification('Delete Fail', 'danger');
+        });
+    }
 
 
     return (
@@ -151,7 +136,7 @@ const ManageFunction = () => {
                     <Controls.Input
                         label="Search"
                         className={classes.searchInput}
-                        placeholder= "Search ...."
+                        placeholder="Search ...."
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
                                 <IconSearch />
@@ -182,11 +167,12 @@ const ManageFunction = () => {
                                             <Controls.ActionButton
                                                 color="primary"
                                                 onClick={() => { openInPopup(item) }}
-                                                >
+                                            >
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
-                                                color="secondary">
+                                                color="secondary"
+                                                onClick={() => { deleteFunctions(item) }}>
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
