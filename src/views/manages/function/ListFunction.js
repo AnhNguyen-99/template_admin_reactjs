@@ -141,7 +141,7 @@ const ManageFunction = () => {
         }).catch(error => {
             console.log(error)
         });
-    }, []);
+    };
 
 
     return (
