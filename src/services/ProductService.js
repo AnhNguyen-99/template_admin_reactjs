@@ -9,7 +9,7 @@ const request = (options) => {
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-
+    console.log(options);
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
@@ -26,12 +26,10 @@ const request = (options) => {
 // =============== CATEGORY ===============
 // Tạo mới danh mục
 
-export function createCategory(category) {
+export function createCategory(category_name, sub_category) {
     var raw = JSON.stringify({
-        "category_name": category.category_name,
-        "sub_category": category.sub_category,
-        "create_id": 1,
-        "update_id": 1
+        "category_name": category_name,
+        "sub_category": sub_category,
     });
 
     return request({
@@ -51,16 +49,16 @@ export function getlistCategory() {
 }
 
 // Xóa danh mục 
-export function deleteCategory(id) {
+export function deleteCategory(category) {
     return request({
-        url: API_BASE_CATEGORY + "delete-category/" + id,
+        url: API_BASE_CATEGORY + "delete-category/" + category.id,
         method: 'DELETE',
         redirect: 'follow'
     });
 }
 
 // Cập nhật danh mục
-export function updateCategory(category, id) {
+export function updateCategory(category) {
     var raw = JSON.stringify({
         'category_name': category.category_name,
         'sub_category': category.sub_category,
@@ -69,7 +67,7 @@ export function updateCategory(category, id) {
     });
 
     return request({
-        url: API_BASE_CATEGORY + 'update-category/' + id,
+        url: API_BASE_CATEGORY + 'update-category/' + category.id,
         method: 'PUT',
         body: raw,
         redirect: 'follow'

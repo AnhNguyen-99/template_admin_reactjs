@@ -63,7 +63,7 @@ const FirebaseRegister = ({ ...others }) => {
             .then(response => {
                 showNotification('Register success', 'success');
                 console.log(response.user);
-                window.location.replace("/admin/login")
+                window.location.replace("/pages/login")
             }).catch(error => {
                 console.log(error)
                 showNotification(error?.detail !== null ? error.detail : 'Register fail', 'danger');

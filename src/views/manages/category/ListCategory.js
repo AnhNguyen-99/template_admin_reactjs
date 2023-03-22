@@ -15,7 +15,8 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import { getlistCategory } from 'services/ProductService';
+import { createCategory, deleteCategory, getlistCategory, updateCategory } from 'services/ProductService';
+import { showNotification } from 'services/NotificationService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -59,7 +60,26 @@ const ManageCategory = () => {
     const [records, setRecords] = useState([])
 
     const addOrEdit = (category, resetForm) => {
-        console.log(category);
+        if (category.id) {
+            updateCategory(category).then(response => {
+                if (response !== null) {
+                    showNotification("Update Category Success", 'success');
+                    getData();
+                }
+            }).catch(error => {
+                showNotification("Update Category Fail", 'danger')
+            })
+        } else {
+            // Thêm mới category
+            createCategory(category.category_name, category.sub_category)
+            .then(response => {
+                showNotification('Create Category Success', 'success');
+                getData();
+            }).catch(error => {
+                showNotification('Create Category Fail', 'danger');
+            });
+        }
+
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
@@ -79,28 +99,47 @@ const ManageCategory = () => {
     }
 
     const handleSearch = (e) => {
-        // console.log(e);
-        // let target = e.target;
-        // setFilterFn({
-        //     fn: items => {
-        //         if (target.value == "")
-        //             return items;
-        //         else
-        //             return items.filter(x => x.categoryName.toLowerCase().includes(target.value))
-        //     }
-        // })
+        let target = e.target;
+        setFilterFn({
+            fn: items => {
+                if (target.value == "") {
+                    console.log(items);
+                    return items;
+                }
+                else {
+                    return items.filter(x => x.category_name.toLowerCase().includes(target.value.toLowerCase()))
+                }
+            }
+        })
         // Code tìm kiếm 
     }
 
     useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = () => {
         let promise;
         promise = getlistCategory()
-        .then (response => {
-            setRecords(response);
+            .then(response => {
+                setRecords(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const deleteCategorys = (item) => {
+        deleteCategory(item).then(response => {
+            if (response !== null) {
+                showNotification("Delete Category Success", 'success');
+                getData();
+            }
         }).catch(error => {
-            console.log(error)
+            console.log(error);
+            showNotification('Delete Category Success', 'danger');
         });
-    }, [])
+    }
 
     return (
         <>
@@ -145,7 +184,8 @@ const ManageCategory = () => {
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
-                                                color="secondary">
+                                                color="secondary"
+                                                onClick={() => {deleteCategorys(item) }}>
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>

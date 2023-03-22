@@ -8,7 +8,6 @@ const request = (options) => {
     })
 
     const defaults = { headers: headers };
-    console.log(options);
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
@@ -22,19 +21,19 @@ const request = (options) => {
         );
 };
 
+
+// =======================================================
+// =================== FUCNTION ==========================
+
+// Lấy danh sách các function
 export function getListFunction() {
     return request({
         url: API_URL_ACC + "list-func",
         method: 'GET'
     });
 }
-export function getListRole() {
-    return request({
-        url: API_URL_ACC + "list-role",
-        method: 'GET'
-    });
-}
-// Thêm mơi function
+
+// Thêm mới function
 export function createFunction(name_function) {
     var raw = JSON.stringify({
         "name_function": name_function
@@ -68,5 +67,20 @@ export function deleteFunction(functions){
         url: API_URL_ACC + "delete-func/" + functions.id,
         method: 'DELETE',
         redirect: 'follow'
+    });
+}
+// ====================================================================
+
+
+
+
+// ====================================================================
+// ========================= ROLE =====================================
+
+// Lấy danh sách các Role 
+export function getListRole() {
+    return request({
+        url: API_URL_ACC + "list-role",
+        method: 'GET'
     });
 }

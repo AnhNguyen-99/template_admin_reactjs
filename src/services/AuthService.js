@@ -24,6 +24,9 @@ const request = (options) => {
     );
 };
 
+// =============================================================
+
+// Đăng nhập thông tin tài khoản USER
 export function login(username, password){
     var raw = JSON.stringify({
         "username": username,
@@ -38,6 +41,8 @@ export function login(username, password){
     });
 }
 
+
+// Đăng ký thông tin tài khoản USER
 export function register(username, email, password){
     var raw = JSON.stringify({
         "username": username,
@@ -52,3 +57,5 @@ export function register(username, email, password){
         redirect: 'follow'
     });
 }
+
+// ==============================================================

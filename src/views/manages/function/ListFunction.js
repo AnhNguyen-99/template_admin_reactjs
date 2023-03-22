@@ -52,23 +52,21 @@ const ManageFunction = () => {
             // Update function
             updateFunction(functions).then(response => {
                 if (response !== null) {
-                    showNotification('Success', 'success');
+                    showNotification('Update Function Success', 'success');
                     getData();
                 }
             }).catch(error => {
-                console.log(error);
-                showNotification('Fail', 'danger');
+                showNotification('Update Function Fail', 'danger');
             });
         } else {
             // Thêm mới function
             createFunction(functions.name_function).then(response => {
                 if (response !== null) {
-                    showNotification('Success', 'success');
+                    showNotification('Create Function Success', 'success');
                     getData();
                 }
             }).catch(error => {
-                console.log(error);
-                showNotification('Fail', 'danger');
+                showNotification('Create Function Fail', 'danger');
             });
         }
         resetForm()

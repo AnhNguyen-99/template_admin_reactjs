@@ -7,15 +7,15 @@ import { createCategory, updateCategory, deleteCategory } from 'services/Product
 const FormCategory = (props) => {
     
     const initialFValues = {
-        categoryName: '',
-        subCategory: ''
+        category_name: '',
+        sub_category: ''
     }
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('categoryName' in fieldValues)
-            temp.categoryName = fieldValues.categoryName ? "" : "This field is required."
+        if ('category_name' in fieldValues)
+            temp.category_name = fieldValues.category_name ? "" : "This field is required."
 
         setErrors({
             ...temp
@@ -39,16 +39,6 @@ const FormCategory = (props) => {
         if (validate()) {
             addOrEdit(values, resetForm);
         }
-        let promise;
-        promise = createCategory()
-        .then(response => {
-            setValues(response);
-        }).catch(error => {
-            console.log(error);
-        });
-
-        console.log(values);
-
     }
 
     useEffect(() => {
@@ -63,18 +53,18 @@ const FormCategory = (props) => {
             <Grid container>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
                     <Controls.Input
-                        name="categoryName"
+                        name="category_name"
                         label="CategoryName"
-                        value={values.categoryName}
+                        value={values.category_name}
                         onChange={handleInputChange}
-                        error={errors.categoryName}
+                        error={errors.category_name}
                     />
                     <Controls.Input
                         label="SubCategory"
-                        name="subCategory"
-                        value={values.subCategory}
+                        name="sub_category"
+                        value={values.sub_category}
                         onChange={handleInputChange}
-                        error={errors.subCategory}
+                        error={errors.sub_category}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>
