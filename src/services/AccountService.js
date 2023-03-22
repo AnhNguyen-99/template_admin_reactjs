@@ -28,10 +28,35 @@ export function getListFunction() {
         method: 'GET'
     });
 }
-
 export function getListRole() {
     return request({
         url: API_URL_ACC + "list-role",
         method: 'GET'
+    });
+// Thêm mơi function
+export function createFunction(name_function) {
+    var raw = JSON.stringify({
+        "name_function": name_function
+    });
+
+    return request({
+        url: API_URL_ACC + "create-func",
+        method: 'POST',
+        body: raw,
+        redirect: 'follow'
+    });
+}
+
+// Cập nhật function
+export function updateFunction(functions) {
+    var raw = JSON.stringify({
+        "name_function": functions.name_function
+    });
+
+    return request({
+        url: API_URL_ACC + "update-func/" + functions.id,
+        method: 'PUT',
+        body: raw,
+        redirect: 'follow'
     });
 }

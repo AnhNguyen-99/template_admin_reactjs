@@ -15,7 +15,8 @@ import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import FormFunction from './FormFunction';
 import { useEffect } from 'react';
-import { getListFunction } from 'services/AccountService';
+import { createFunction, getListFunction, updateFunction } from 'services/AccountService';
+import { showNotification } from 'services/NotificationService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -62,10 +63,31 @@ const ManageFunction = () => {
 
     const [open, setOpen] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
+    const [filterFn, setFilterFn] = useState({ fn: items => {console.log(items); return items; } });
     const [records, setRecords] = useState([])
 
     const addOrEdit = (functions, resetForm) => {
+        if(functions.id){
+            // Update function
+            updateFunction(functions).then(response => {
+                if(response !== null){
+                    showNotification('Success', 'success');
+                    getData();
+                }
+            }).catch(error => {
+                showNotification('Fail', 'danger');
+            });
+        }else{
+            // Thêm mới function
+            createFunction(functions.name_function).then(response => {
+                if(response !== null){
+                    showNotification('Success', 'success');
+                    getData();
+                }
+            }).catch(error => {
+                showNotification('Fail', 'danger');
+            });
+        }
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
@@ -85,20 +107,32 @@ const ManageFunction = () => {
     }
 
     const handleSearch = (e) => {
-        // console.log(e);
-        // let target = e.target;
-        // setFilterFn({
-        //     fn: items => {
-        //         if (target.value == "")
-        //             return items;
-        //         else
-        //             return items.filter(x => x.categoryName.toLowerCase().includes(target.value))
-        //     }
-        // })
-        // Code tìm kiếm 
+        let target = e.target;
+        setFilterFn({
+            fn: items => {
+                if (target.value == ""){
+                    console.log(items);
+                    return items;
+                }
+                else
+                    return items.filter(x => x.name_function.toLowerCase().includes(target.value.toLowerCase()))
+            }
+        })
     }
 
     useEffect(() => {
+        // let promise;
+        // promise = getListFunction()
+        // .then(response => {
+        //     setRecords(response);
+        //     return;
+        // }).catch(error => {
+        //     console.log(error)
+        // });
+        getData();
+    }, [])
+
+    const getData = () => {
         let promise;
         promise = getListFunction()
         .then(response => {

@@ -6,14 +6,14 @@ import Controls from 'ui-component/controls/Controls';
 const FormFunction = (props) => {
     
     const initialFValues = {
-        nameFunction: ''
+        name_function: ''
     }
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('nameFunction' in fieldValues)
-            temp.nameFunction = fieldValues.nameFunction ? "" : "This field is required."
+        if ('name_function' in fieldValues)
+            temp.name_function = fieldValues.name_function ? "" : "This field is required."
 
         setErrors({
             ...temp
@@ -51,11 +51,11 @@ const FormFunction = (props) => {
             <Grid container style={{width: '500px'}}>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
                     <Controls.Input
-                        name="nameFunction"
+                        name="name_function"
                         label="NameFunction"
-                        value={values.nameFunction}
+                        value={values.name_function}
                         onChange={handleInputChange}
-                        error={errors.nameFunction}
+                        error={errors.name_function}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>
