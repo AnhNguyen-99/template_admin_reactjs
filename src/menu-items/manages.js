@@ -5,7 +5,8 @@ import {
     IconWindmill, 
     IconApps,
     IconBox,
-    IconBriefcase  
+    IconBriefcase,
+    IconUsers 
 } from '@tabler/icons';
 
 // constant
@@ -16,7 +17,8 @@ const icons = {
     IconWindmill,
     IconApps,
     IconBox,
-    IconBriefcase
+    IconBriefcase,
+    IconUsers
 };
 
 const manages = {
@@ -24,6 +26,14 @@ const manages = {
     title: 'Manages',
     type: 'group',
     children: [
+        {
+            id: 'manage_customer',
+            title: 'Manage Customer',
+            type: 'item',
+            url: '/manage/customer',
+            icon: icons.IconUsers,
+            breadcrumbs: false
+        },
         {
             id: 'manage_category',
             title: 'Manage Category',

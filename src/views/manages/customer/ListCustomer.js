@@ -14,9 +14,9 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import FormSupplier from './FormSupplier';
 import { showNotification } from 'services/NotificationService';
-import { getListSupplier, createSupplier, deleteSupplier, updateSupplier } from 'services/ProductService';
+import { getListCustomer, createCustomer, deleteCustomer, updateCustomer } from 'services/AccountService';
+import FormCustomer from './FormCustomer';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,21 +32,23 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageSupplier = () => {
+const ManageCustomer = () => {
 
     const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'nameSupplier', label: 'NameSupplier' },
-        { id: 'codeTax', label: 'CodeTax'},
+        { id: 'username', label: 'NameCustomer' },
+        { id: 'customer_code', label: 'CustomerCode'},
         { id: 'email', label: 'Email'},
         { id: 'phone', label: 'Phone'},
+        { id: 'gender', label: 'Gender'},
+        { id: 'date', label: 'Date'},
         { id: 'address', label: 'Address'},
         { id: 'province', label: 'Province'},
         { id: 'distric', label: 'District'},
         { id: 'ward', label: 'Ward'},
-        { id: 'group_supplier', label: 'GroupSupplier'},
+        { id: 'type', label: 'Type'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -55,23 +57,20 @@ const ManageSupplier = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (supplier, resetForm) => {
-        if (supplier.id) {
-            updateSupplier(supplier).then(response => {
+    const addOrEdit = (customer, resetForm) => {
+        if (customer.id) {
+            updateCustomer(customer).then(response => {
                 if (response !== null) {
-                    showNotification("Update Supplier Success", 'success');
+                    showNotification("Update Customer Success", 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Supplier Fail", 'danger');
+                showNotification("Update Customer Fail", 'danger');
             })
         } else {
-            createSupplier(supplier)
+            createCustomer(customer)
             .then(response => {
-                showNotification("Create Supplier Success", 'success');
-                getData();
-            }).catch(error => {
-                showNotification("Create Supplier Fail", 'danger');
+                showNotification("Create Customer Success", 'success');
             });
         }
         resetForm()
@@ -112,7 +111,7 @@ const ManageSupplier = () => {
     }, [])
 
     const getData = () => {
-        getListSupplier()
+        getListCustomer()
             .then(response => {
                 setRecords(response);
             }).catch(error => {
@@ -120,21 +119,21 @@ const ManageSupplier = () => {
             });
     };
 
-    const deleteSuppliers = (item) => {
-        deleteSupplier(item).then(response => {
+    const deleteCustomers = (item) => {
+        deleteCustomer(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Supplier Success", 'success');
+                showNotification("Delete Customer Success", 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification("Delete Supplier Fail", 'danger');
+            showNotification("Delete Customer Fail", 'danger');
         });
     }
 
     return (
         <>
-            <MainCard title="List Supplier">
+            <MainCard title="List Customer">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
@@ -165,15 +164,17 @@ const ManageSupplier = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.supplier_name}</TableCell>
-                                        <TableCell>{item.code_tax}</TableCell>
+                                        <TableCell>{item.username}</TableCell>
+                                        <TableCell>{item.customer_code}</TableCell>
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
+                                        <TableCell>{item.gender}</TableCell>
+                                        <TableCell>{item.date}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>{item.province}</TableCell>
                                         <TableCell>{item.district}</TableCell>
                                         <TableCell>{item.ward}</TableCell>
-                                        <TableCell>{item.group_supplier}</TableCell>
+                                        <TableCell>{item.type}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
@@ -183,7 +184,7 @@ const ManageSupplier = () => {
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick = {() => { deleteSuppliers(item) }}
+                                                onClick = {() => { deleteCustomers(item) }}
                                             >
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
@@ -197,12 +198,12 @@ const ManageSupplier = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
-                <FormSupplier recordForEdit={recordForEdit}
+            <Popup title="Create Customer" openPopup={open} setOpenPopup={setOpen}>
+                <FormCustomer recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageSupplier;
+export default ManageCustomer;

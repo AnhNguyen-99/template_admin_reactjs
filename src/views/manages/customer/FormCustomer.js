@@ -5,31 +5,30 @@ import Controls from "ui-component/controls/Controls";
 import { useState } from "react";
 import { getListDistricByProvinceId, getListProvince, getListWardbyDistrictId } from "services/AccountService";
 
-
-const FormSupplier = (props) => {
-
+const FormCustomer = (props) => {
     const initialFValues = {
-        supplier_name: '',
+        username: '',
+        customer_code: '',
         code_tax: '',
+        company_name: '',
+        gender: '',
+        date: '',
         email: '',
         phone: '',
         address: '',
         province: '',
         district: '',
-        ward: ''
+        ward: '',
+        image: ''
     }
 
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('supplier_name' in fieldValues)
-            temp.supplier_name = fieldValues.supplier_name ? "" : "This fields is required."
-        if ('phone' in fieldValues)
-            temp.phone = fieldValues.phone ? "" : "This fields is required."
-        if ('address' in fieldValues)
-            temp.address = fieldValues.address ? "" : "This fields is required."
-            
+        if ('username' in fieldValues)
+            temp.username = fieldValues.username ? "" : "This fields is required."
+        
         setErrors({
             ...temp
         })
@@ -39,7 +38,7 @@ const FormSupplier = (props) => {
     }
 
     const [lstProvince, setLstProvince] = useState([])
-    const [lstDistric, setLstDistric] = useState([])
+    const [lstDistric, setLstDistrict] = useState([])
     const [lstWard, setLstWard] = useState([])
 
     const {
@@ -63,6 +62,7 @@ const FormSupplier = (props) => {
             setValues({
                 ...recordForEdit
             })
+        
         getListProvinces();
     }, [recordForEdit])
 
@@ -72,14 +72,13 @@ const FormSupplier = (props) => {
             let list = [];
             response.forEach(item => {
                 let customItem = {};
-                customItem = {...item, id: item.id , title: item.name};
+                customItem = {...item, id: item.id, title: item.name};
                 list = [...list, customItem];
             });
             setLstProvince(list);
         }).catch(error => {
-            console.log(error)
+            console.log(error);
         });
-
     }
 
     const handleChangeProvince = (event) => {
@@ -90,42 +89,29 @@ const FormSupplier = (props) => {
             ...values,
             province: value
         })
-        // Lấy ds huyện theo id tỉnh
+
+        // Lấy danh sách huyện theo id tỉnh
         getListDistricByProvinceId(value)
         .then(response => {
             let list = [];
             response.forEach(item => {
                 let customItem = {};
-                customItem = {...item, id: item.id , title: item.name};
+                customItem = {...item, id: item.id, title: item.name};
                 list = [...list, customItem];
             });
-            setLstDistric(list);
+            setLstDistrict(list);
         }).catch(error => {
-            console.log(error)
+            console.log(error);
         });
-
-        // // Lấy danh sách phường/xã theo id quận/huyện
-        // getListWardbyDistrictId(value)
-        // .then(response => {
-        //     let list = [];
-        //     response.forEach(item => {
-        //         let customItem = {};
-        //         customItem = {...item, id: item.id, title: item.name}
-        //         list = [...list, customItem];
-        //     })
-        //     setLstWard(list);
-        // }).catch(error => {
-        //     console.log(error)
-        // })
     }
-    
+
     const handleChangeDistrict = (event) => {
         const {
             target: { value },
         } = event;
         setValues({
             ...values,
-            district: value
+            province: value
         })
 
         // Lấy danh sách phường/xã theo id quận/huyện
@@ -142,24 +128,31 @@ const FormSupplier = (props) => {
             console.log(error)
         })
     }
-
+    
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container style={{ width: '700px' }}>
                 <Grid item xs={6} style={{ marginBottom: '15px' }}>
                     <Controls.Input
-                        name="supplier_name"
-                        label="SupplierName"
-                        value={values.supplier_name}
+                        name="username"
+                        label="CustomerName"
+                        value={values.username}
                         onChange={handleInputChange}
-                        error={errors.supplier_name}
+                        error={errors.username}
                     />
                     <Controls.Input
-                        name="code_tax"
-                        label="CodeTax"
-                        value={values.code_tax}
+                        name="customer_code"
+                        label="CustomerCode"
+                        value={values.customer_tax}
                         onChange={handleInputChange}
-                        error={errors.code_tax}
+                        error={errors.customer_tax}
+                    />
+                    <Controls.RadioGroup
+                        name="gender"
+                        label="Gender"
+                        value={values.gender}
+                        onChange={handleInputChange}
+                        error={errors.gender} 
                     />
                     <Controls.Input
                         name="email"
@@ -219,4 +212,4 @@ const FormSupplier = (props) => {
     )
 }
 
-export default FormSupplier;
+export default FormCustomer;

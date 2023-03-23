@@ -72,10 +72,84 @@ export function deleteFunction(functions){
 // ====================================================================
 
 
+// ====================================================================
+// ============================== ROLE ================================
+// Lấy danh sách các khách hàng
+export function getListCustomer() {
+    return request({
+        url: API_URL_ACC + "list-customer",
+        method: 'GET'
+    })
+}
+
+// Tạo mới khách hàng
+export function createCustomer(customer) {
+    var raw = JSON.stringify({
+        'username': customer.username,
+        'customer_code': customer.customer_code,
+        'code_tax': customer.code_tax,
+        'phone': customer.phone,
+        'email': customer.email,
+        'gender': customer.gender,
+        'date': customer.date,
+        'address': customer.address,
+        'province': customer.province,
+        'district': customer.district,
+        'ward': customer.ward,
+        'type': customer.type,
+        'company_name': customer.company_name,
+        'image': customer.image
+    })
+
+    return request({
+        url: API_URL_ACC + "create-customer",
+        method: "POST",
+        body: raw,
+        redirect: 'follow'
+    })
+}
+
+// Cập nhật Customer
+export function updateCustomer(customer) {
+    var raw = JSON.stringify({
+        'username': customer.username,
+        'customer_code': customer.customer_code,
+        'code_tax': customer.code_tax,
+        'phone': customer.phone,
+        'email': customer.email,
+        'gender': customer.gender,
+        'date': customer.date,
+        'address': customer.address,
+        'province': customer.province,
+        'district': customer.district,
+        'ward': customer.ward,
+        'type': customer.type,
+        'company_name': customer.company_name,
+        'image': customer.image
+    });
+
+    return request({
+        url: API_URL_ACC + "update-customer/" + customer.id,
+        method: "PUT",
+        body: raw,
+        redirect: 'follow'
+    });
+}
+
+// Xóa các customer
+export function deleteCustomer(customer) {
+    return request({
+        url: API_URL_ACC + "delete-customer/" + customer.id,
+        method: 'DELETE'
+    });
+}
+
+// ====================================================================
+
 
 
 // ====================================================================
-// ========================= ROLE =====================================
+// ============================== ROLE ================================
 
 // Lấy danh sách các Role 
 export function getListRole() {
@@ -87,7 +161,8 @@ export function getListRole() {
 
 
 // ======================================================================
-// ====================== Tỉnh ==========================================
+// =============================== TỈNH =================================
+
 // Lấy danh sách tỉnh
 export function getListProvince(){
     return request({
@@ -102,4 +177,12 @@ export function getListDistricByProvinceId(id){
         url: API_URL_ACC + "list-distric/" + id,
         method: 'GET'
     });
+}
+
+// Lấy danh sách các xã theo Id Quận/Huyện
+export function getListWardbyDistrictId(id) {
+    return request({
+        url: API_URL_ACC + "list-ward/" + id,
+        method: 'GET'
+    })
 }
