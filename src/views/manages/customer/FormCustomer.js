@@ -22,6 +22,16 @@ const FormCustomer = (props) => {
         image: ''
     }
 
+    const genders = [
+        {
+            id: 0,
+            title: 'Male'
+        },
+        {
+            id: 1,
+            title: 'Female'
+        }
+    ]
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
@@ -150,9 +160,17 @@ const FormCustomer = (props) => {
                     <Controls.RadioGroup
                         name="gender"
                         label="Gender"
+                        items={genders}
                         value={values.gender}
                         onChange={handleInputChange}
-                        error={errors.gender} 
+                        error={errors.gender}
+                    />
+                    <Controls.BasicDatePicker
+                        name="date"
+                        label="Date"
+                        value={values.date}
+                        onChange={handleInputChange}
+                        error={errors.date}
                     />
                     <Controls.Input
                         name="email"
@@ -160,7 +178,9 @@ const FormCustomer = (props) => {
                         value={values.email}
                         onChange={handleInputChange}
                         error={errors.email}
-                    />
+                    />  
+                </Grid>
+                <Grid item xs={6} style={{ marginBottom: '15px' }}>
                     <Controls.Input
                         name="phone"
                         label="Phone"
@@ -168,8 +188,6 @@ const FormCustomer = (props) => {
                         onChange={handleInputChange}
                         error={errors.phone}
                     />
-                </Grid>
-                <Grid item xs={6} style={{ marginBottom: '15px' }}>
                     <Controls.Select 
                         options={lstProvince}
                         value={values.province}
