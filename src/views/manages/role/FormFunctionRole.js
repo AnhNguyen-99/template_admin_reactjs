@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Grid, TableBody, TableRow, TableCell } from '@mui/material';
-import { useForm, Form } from 'ui-component/useForm';
+import { useForm } from 'ui-component/useForm';
 import Controls from 'ui-component/controls/Controls';
 import useTable from 'ui-component/useTable';
 import { useState } from 'react';
@@ -12,31 +12,31 @@ const FormFunctionRole = (props) => {
         { id: 2, title: 'Edit' },
         { id: 3, title: 'Delete' },
     ]
-    
+
     const data = [
         {
             'id': 1,
             'functionName': 'Manages Category',
             'apply': true,
-            'action': 1
+            'action': [1, 2]
         },
         {
             'id': 2,
             'functionName': 'Manages Role',
             'apply': false,
-            'action': 1
+            'action': [1, 2]
         },
         {
             'id': 3,
             'functionName': 'Manage Branch',
             'apply': true,
-            'action': 1
+            'action': [1, 2]
         },
         {
             'id': 4,
             'functionName': 'Manages User',
             'apply': false,
-            'action': 1
+            'action': [1, 2]
         }
     ]
 
@@ -86,10 +86,9 @@ const FormFunctionRole = (props) => {
     } = useTable(records, headCells, filterFn);
 
     const handleSubmit = e => {
-        e.preventDefault()
-        if (validate()) {
-            addOrEdit(values, resetForm);
-        }
+        e.preventDefault();
+        console.log(records);
+        addOrEdit(records, resetForm);
     }
 
     useEffect(() => {
@@ -99,6 +98,29 @@ const FormFunctionRole = (props) => {
             })
     }, [recordForEdit])
 
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const {
+            target: { name },
+        } = event;
+        // Cập nhật list
+        let dataNew = [];
+        records.forEach(e => {
+            let item = {};
+            let ls = [];
+            if (e.id.toString() === name) {
+                ls = value;
+            }
+            else {
+                ls = e.action;
+            }
+            item = { id: e.id, functionName: e.functionName, apply: e.apply, action: ls };
+            dataNew = [...dataNew, item];
+        });
+        setRecords(dataNew);
+    }
     return (
         // <Form onSubmit={handleSubmit} style={{width: '500px'}}>
         //     <Grid container style={{width: '500px'}}>
@@ -133,14 +155,20 @@ const FormFunctionRole = (props) => {
                                     <TableCell>{item.id}</TableCell>
                                     <TableCell>{item.functionName}</TableCell>
                                     <TableCell><Controls.Checkbox value={item.apply} onChange={handleInputChange}></Controls.Checkbox></TableCell>
-                                    <TableCell><Controls.Select options={options} value={item.action}  onChange={handleInputChange}></Controls.Select></TableCell>
+                                    <TableCell><Controls.SelectMultiple options={options} value={item.action} onChange={handleChange} name={item.id.toString()}></Controls.SelectMultiple></TableCell>
                                 </TableRow>
-                                )
-                                )
+                                ))
                             }
                         </TableBody>
                     </TblContainer>
                     <TblPagination />
+                </Grid>
+                <Grid item xs={12} style={{ textAlign: 'right' }}>
+                    <div>
+                        <Controls.Button
+                            type="submit"
+                            text="Save" onClick={handleSubmit}/>
+                    </div>
                 </Grid>
             </Grid>
         </div>

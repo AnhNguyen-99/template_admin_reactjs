@@ -152,7 +152,7 @@ const ManageSupplier = () => {
                     />
                 </Toolbar>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{overflow: 'auto'}}>
                         {/* === Table === */}
                         <TblContainer>
                             <TblHead />

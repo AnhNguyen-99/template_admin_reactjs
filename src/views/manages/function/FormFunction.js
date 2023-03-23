@@ -4,7 +4,7 @@ import { useForm, Form } from 'ui-component/useForm';
 import Controls from 'ui-component/controls/Controls';
 
 const FormFunction = (props) => {
-    
+
     const initialFValues = {
         name_function: ''
     }
@@ -48,8 +48,8 @@ const FormFunction = (props) => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container style={{width: '500px'}}>
-                <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
+            <Grid container style={{ width: '500px' }}>
+                <Grid item xs={12} style={{ textAlign: 'center', marginBottom: '15px' }}>
                     <Controls.Input
                         name="name_function"
                         label="NameFunction"
@@ -58,7 +58,7 @@ const FormFunction = (props) => {
                         error={errors.name_function}
                     />
                 </Grid>
-                <Grid item xs={12} style={{textAlign: 'right'}}>
+                <Grid item xs={12} style={{ textAlign: 'right' }}>
                     <div>
                         <Controls.Button
                             type="submit"

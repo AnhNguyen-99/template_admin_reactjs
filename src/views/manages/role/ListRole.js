@@ -11,7 +11,7 @@ import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
-import { IconEdit, IconTrash, IconSearch, IconApps, IconAlignRight } from '@tabler/icons';
+import { IconEdit, IconTrash, IconSearch, IconAlignRight } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import FormRole from './FormRole';
 import FormFunctionRole from './FormFunctionRole';
@@ -68,14 +68,13 @@ const ManageRole = () => {
     const [records, setRecords] = useState([])
 
     const addOrEdit = (role, resetForm) => {
-        console.log(role);
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
     }
 
-    const addFunctionRole = (role, resetForm) => {
-        console.log(role)
+    const addFunctionRole = (lstFunction, resetForm) => {
+        console.log(lstFunction);
         resetForm()
         setRecordForEdit(null)
         setOpenAddFunction(false)

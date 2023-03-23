@@ -18,9 +18,14 @@ const useStyles = makeStyles(theme => ({
             cursor: 'pointer',
         },
     },
+    paper: {
+        width: '100%',
+        marginTop: theme.spacing.unit * 3,
+        overflowX: 'auto',
+    },
 }))
 
-export default function useTable(records, headCells,filterFn) {
+export default function useTable(records, headCells, filterFn) {
 
     const classes = useStyles();
 
@@ -31,7 +36,7 @@ export default function useTable(records, headCells,filterFn) {
     const [orderBy, setOrderBy] = useState()
 
     const TblContainer = props => (
-        <Table className={classes.table}>
+        <Table className={classes.table} style={{overflow: 'auto', width: '100%'}}>
             {props.children}
         </Table>
     )
