@@ -25,10 +25,13 @@ const FormSupplier = (props) => {
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('supplier_name' in fieldValues && 'phone' in fieldValues)
+        if ('supplier_name' in fieldValues)
             temp.supplier_name = fieldValues.supplier_name ? "" : "This fields is required."
-        temp.phone = fieldValues.phone ? "" : "This field is required."
-
+        if ('phone' in fieldValues)
+            temp.phone = fieldValues.phone ? "" : "This fields is required."
+        if ('address' in fieldValues)
+            temp.address = fieldValues.address ? "" : "This fields is required."
+            
         setErrors({
             ...temp
         })
@@ -88,9 +91,9 @@ const FormSupplier = (props) => {
                     <Controls.Input
                         name="phone"
                         label="Phone"
-                        value={values.Phone}
+                        value={values.phone}
                         onChange={handleInputChange}
-                        error={errors.Phone}
+                        error={errors.phone}
                     />
                     <Controls.Select 
                         options={options}
