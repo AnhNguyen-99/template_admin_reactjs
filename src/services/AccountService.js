@@ -84,3 +84,22 @@ export function getListRole() {
         method: 'GET'
     });
 }
+
+
+// ======================================================================
+// ====================== Tỉnh ==========================================
+// Lấy danh sách tỉnh
+export function getListProvince(){
+    return request({
+        url: API_URL_ACC + "list-province",
+        method: 'GET'
+    });
+}
+
+// Lấy danh sách huyện theo id Tỉnh
+export function getListDistricByProvinceId(id){
+    return request({
+        url: API_URL_ACC + "list-distric/" + id,
+        method: 'GET'
+    });
+}

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import { useForm, Form } from "ui-component/useForm";
 import Controls from "ui-component/controls/Controls";
+import { useState } from "react";
+import { getListDistricByProvinceId, getListProvince } from "services/AccountService";
 
 
 const FormSupplier = (props) => {
@@ -18,7 +20,8 @@ const FormSupplier = (props) => {
         email: '',
         phone: '',
         address: '',
-        area: ''
+        area: '',
+        province: ''
     }
 
     const { addOrEdit, recordForEdit } = props
@@ -39,6 +42,9 @@ const FormSupplier = (props) => {
         if (fieldValues == values)
             return Object.values(temp).every(x => x == "")
     }
+
+    const [lstProvince, setLstProvince] = useState([])
+    const [lstDistric, setLstDistric] = useState([])
 
     const {
         values,
@@ -61,7 +67,47 @@ const FormSupplier = (props) => {
             setValues({
                 ...recordForEdit
             })
+        getListProvinces();
     }, [recordForEdit])
+
+    const getListProvinces = () => {
+        getListProvince()
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id , title: item.name};
+                list = [...list, customItem];
+            });
+            setLstProvince(list);
+        }).catch(error => {
+            console.log(error)
+        });
+
+    }
+
+    const handleChangeProvince = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setValues({
+            ...values,
+            province: value
+        })
+        // Lấy ds huyện theo id tỉnh
+        getListDistricByProvinceId(value)
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id , title: item.name};
+                list = [...list, customItem];
+            });
+            setLstDistric(list);
+        }).catch(error => {
+            console.log(error)
+        });
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -96,11 +142,18 @@ const FormSupplier = (props) => {
                         error={errors.phone}
                     />
                     <Controls.Select 
-                        options={options}
-                        value={values.area}
+                        options={lstProvince}
+                        value={values.province}
+                        onChange={handleChangeProvince}
+                        name="province"
+                        label="Province"
+                    />
+                    <Controls.Select 
+                        options={lstDistric}
+                        value={values.distric}
                         onChange={handleInputChange}
-                        name="area"
-                        label="Area"
+                        name="distric"
+                        label="Distric"
                     />
                     <Controls.Input
                         name="address"
