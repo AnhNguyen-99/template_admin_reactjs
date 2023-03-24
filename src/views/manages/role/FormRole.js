@@ -6,14 +6,14 @@ import Controls from 'ui-component/controls/Controls';
 const FormRole = (props) => {
     
     const initialFValues = {
-        roleName: ''
+        role_name: ''
     }
     const { addOrEdit, recordForEdit } = props
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('roleName' in fieldValues)
-            temp.roleName = fieldValues.roleName ? "" : "This field is required."
+        if ('role_name' in fieldValues)
+            temp.role_name = fieldValues.role_name ? "" : "This field is required."
 
         setErrors({
             ...temp
@@ -51,11 +51,11 @@ const FormRole = (props) => {
             <Grid container style={{width: '500px'}}>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
                     <Controls.Input
-                        name="roleName"
+                        name="role_name"
                         label="RoleName"
-                        value={values.roleName}
+                        value={values.role_name}
                         onChange={handleInputChange}
-                        error={errors.roleName}
+                        error={errors.role_name}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>

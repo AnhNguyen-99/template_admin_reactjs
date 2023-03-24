@@ -13,9 +13,9 @@ const FormCategory = (props) => {
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('category_name' in fieldValues)
+        if ('category_name' in fieldValues) {
             temp.category_name = fieldValues.category_name ? "" : "This field is required."
-
+        }
         setErrors({
             ...temp
         })

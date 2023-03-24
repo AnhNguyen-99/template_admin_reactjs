@@ -16,7 +16,7 @@ const FormSupplier = (props) => {
         address: '',
         province: '',
         district: '',
-        ward: ''
+        wards: ''
     }
 
     const { addOrEdit, recordForEdit } = props
@@ -39,8 +39,8 @@ const FormSupplier = (props) => {
     }
 
     const [lstProvince, setLstProvince] = useState([])
-    const [lstDistric, setLstDistric] = useState([])
-    const [lstWard, setLstWard] = useState([])
+    const [lstDistrict, setLstDistrict] = useState([])
+    const [lstWards, setLstWards] = useState([])
 
     const {
         values,
@@ -99,7 +99,7 @@ const FormSupplier = (props) => {
                 customItem = {...item, id: item.id , title: item.name};
                 list = [...list, customItem];
             });
-            setLstDistric(list);
+            setLstDistrict(list);
         }).catch(error => {
             console.log(error)
         });
@@ -137,7 +137,7 @@ const FormSupplier = (props) => {
                 customItem = {...item, id: item.id, title: item.name}
                 list = [...list, customItem];
             })
-            setLstWard(list);
+            setLstWards(list);
         }).catch(error => {
             console.log(error)
         })
@@ -185,17 +185,17 @@ const FormSupplier = (props) => {
                         label="Province"
                     />
                     <Controls.Select 
-                        options={lstDistric}
-                        value={values.distric}
+                        options={lstDistrict}
+                        value={values.district}
                         onChange={handleChangeDistrict}
-                        name="distric"
-                        label="Distric"
+                        name="district"
+                        label="District"
                     />
                     <Controls.Select
-                        options={lstWard}
-                        value={values.ward}
+                        options={lstWards}
+                        value={values.wards}
                         onChange={handleInputChange}
-                        name="ward"
+                        name="wards"
                         label="Ward"
                     />
                     <Controls.Input

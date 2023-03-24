@@ -16,7 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import FormRole from './FormRole';
 import FormFunctionRole from './FormFunctionRole';
 import { useEffect } from 'react';
-import { getListRole } from 'services/AccountService';
+import { getListRole, createRole, updateRole, deleteRole } from 'services/AccountService';
+import { showNotification } from 'services/NotificationService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -62,23 +63,41 @@ const ManageRole = () => {
     ]
 
     const [open, setOpen] = useState(false);
-    const [openAddFunction, setOpenAddFunction] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
     const addOrEdit = (role, resetForm) => {
+        if (role.id) {
+            updateRole(role).then(response => {
+                if (response !== null) {
+                    showNotification("Update Role Success", 'success');
+                    getData();
+                }
+            }).catch(error => {
+                showNotification("Update Role Fail", 'danger');
+            })
+        } else {
+            // Thêm mới role
+            createRole(role)
+            .then(response => {
+                showNotification("Create Role Success", 'success');
+                getData();
+            }).catch(error => {
+                showNotification("Create Role Fail", 'danger');
+            });
+        }
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
     }
 
-    const addFunctionRole = (lstFunction, resetForm) => {
-        console.log(lstFunction);
-        resetForm()
-        setRecordForEdit(null)
-        setOpenAddFunction(false)
-    }
+    // const addFunctionRole = (lstFunction, resetForm) => {
+    //     console.log(lstFunction);
+    //     resetForm()
+    //     setRecordForEdit(null)
+    //     setOpenAddFunction(false)
+    // }
 
     const {
         TblContainer,
@@ -99,29 +118,44 @@ const ManageRole = () => {
     }
 
     const handleSearch = (e) => {
-        // console.log(e);
-        // let target = e.target;
-        // setFilterFn({
-        //     fn: items => {
-        //         if (target.value == "")
-        //             return items;
-        //         else
-        //             return items.filter(x => x.categoryName.toLowerCase().includes(target.value))
-        //     }
-        // })
+        let target = e.target;
+        setFilterFn({
+            fn: items => {
+                if (target.value == "")
+                    return items;
+                else
+                    return items.filter(x => x.categoryName.toLowerCase().includes(target.value))
+            }
+        })
         // Code tìm kiếm 
     }
 
     useEffect(() => {
+        getData();
+    }, []);
+
+    const getData = () => {
         let promise;
         promise = getListRole()
-        .then(response => {
-            setRecords(response);
-        })
-        .catch(error => {
+            .then(response => {
+                setRecords(response);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    const deleteRoles = (item) => {
+        deleteRole(item).then(response => {
+            if (response !== null) {
+                showNotification("Delete Role Success", 'success');
+                getData();
+            }
+        }).catch(error => {
             console.log(error);
-        })
-    }, []);
+            showNotification("Delete Role Fail", 'danger');
+        });
+    }
 
     return (
         <>
@@ -171,7 +205,8 @@ const ManageRole = () => {
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
-                                                color="secondary">
+                                                color="secondary"
+                                                onClick={() => {deleteRoles(item) }}>
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
@@ -187,11 +222,6 @@ const ManageRole = () => {
             <Popup title="Create Role" openPopup={open} setOpenPopup={setOpen}>
                 <FormRole recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
-            </Popup>
-
-            <Popup title="Add Function" openPopup={openAddFunction} setOpenPopup={setOpenAddFunction}>
-                <FormFunctionRole recordForEdit={recordForEdit}
-                    addOrEdit={addFunctionRole} />
             </Popup>
         </>
     );

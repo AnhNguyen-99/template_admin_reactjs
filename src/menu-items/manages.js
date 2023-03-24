@@ -6,7 +6,9 @@ import {
     IconApps,
     IconBox,
     IconBriefcase,
-    IconUsers 
+    IconUsers,
+    IconUser,
+    IconMenu2
 } from '@tabler/icons';
 
 // constant
@@ -18,7 +20,9 @@ const icons = {
     IconApps,
     IconBox,
     IconBriefcase,
-    IconUsers
+    IconUsers,
+    IconUser,
+    IconMenu2
 };
 
 const manages = {
@@ -26,13 +30,30 @@ const manages = {
     title: 'Manages',
     type: 'group',
     children: [
+        
         {
-            id: 'manage_customer',
-            title: 'Manage Customer',
-            type: 'item',
-            url: '/manage/customer',
-            icon: icons.IconUsers,
-            breadcrumbs: false
+            id: 'user',
+            title: 'Manage User',
+            type: 'collapse',
+            icon: icons.IconMenu2,
+            children: [
+                {
+                    id: 'manage-staff',
+                    title: "Manage Employee",
+                    type: 'item',
+                    url: '/manage/employee',
+                    icon: icons.IconUser,
+                    breadcrumbs: false
+                },
+                {
+                    id: 'manage-customer',
+                    title: "Manage Customer",
+                    type: 'item',
+                    url: '/manage/customer',
+                    icon: icons.IconUsers,
+                    breadcrumbs: false
+                }
+            ]
         },
         {
             id: 'manage_category',

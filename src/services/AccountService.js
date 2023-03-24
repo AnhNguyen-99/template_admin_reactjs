@@ -2,7 +2,7 @@ const { API_BASE_URL } = require("env");
 
 const API_URL_ACC = API_BASE_URL + "acc/";
 
-const request = (options) => {
+const request = async (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
     })
@@ -10,15 +10,12 @@ const request = (options) => {
     const defaults = { headers: headers };
     options = Object.assign({}, defaults, options);
 
-    return fetch(options.url, options)
-        .then(response =>
-            response.json().then(json => {
-                if (!response.ok) {
-                    return Promise.reject(json);
-                }
-                return json;
-            })
-        );
+    const response = await fetch(options.url, options);
+    const json = await response.json();
+    if (!response.ok) {
+        return Promise.reject(json);
+    }
+    return json;
 };
 
 
@@ -95,7 +92,7 @@ export function createCustomer(customer) {
         'address': customer.address,
         'province': customer.province,
         'district': customer.district,
-        'ward': customer.ward,
+        'wards': customer.wards,
         'type': customer.type,
         'company_name': customer.company_name,
         'image': customer.image
@@ -149,6 +146,77 @@ export function deleteCustomer(customer) {
 
 
 // ====================================================================
+// ============================ USER ==================================
+
+// Tạo mới danh sách user
+export function createUser(user) {
+    var raw = JSON.stringify({
+        'username': user.username,
+        'code': user.code,
+        'phone': user.phone,
+        'email': user.email,
+        'gender': user.gender,
+        'date': user.date,
+        'address': user.address,
+        'province': user.province,
+        'district': user.district,
+        'wards': user.wards,
+        'note': user.note,
+        'image': user.image
+    })
+
+    return request({
+        url: API_URL_ACC + "create-user",
+        method: "POST",
+        body: raw,
+        redirect: 'follow'
+    })
+}
+
+// Lấy danh sách các user
+export function getListUser() {
+    return request({
+        url: API_URL_ACC + "list-user",
+        method: "GET"
+    })
+}
+
+// Cập nhật tài khoản user
+export function updateUser(user) {
+    var raw = JSON.stringify({
+        'username': user.username,
+        'code': user.code,
+        'phone': user.phone,
+        'email': user.email,
+        'gender': user.gender,
+        'date': user.date,
+        'address': user.address,
+        'province': user.province,
+        'district': user.district,
+        'wards': user.wards,
+        'note': user.note,
+        'image': user.image
+    });
+
+    return request({
+        url: API_URL_ACC + "update-user/" + user.id,
+        body: raw,
+        method: "PUT",
+        redirect: 'follow'
+    });
+}
+
+// Xóa tài khoản user
+export function deleteUser(user) {
+    return request({
+        url: API_URL_ACC + "delete-user/" + user.id,
+        method: 'DELETE'
+    });
+}
+
+
+
+// ====================================================================
 // ============================== ROLE ================================
 
 // Lấy danh sách các Role 
@@ -159,6 +227,41 @@ export function getListRole() {
     });
 }
 
+// Tạo mới Role
+export function createRole(role) {
+    var raw = JSON.stringify({
+        'role_name': role.role_name
+    });
+
+    return request({
+        url: API_URL_ACC + "create-role",
+        method: 'POST',
+        body: raw,
+        redirect: "follow"
+    });
+}
+
+// Xóa role theo id
+export function deleteRole(role) {
+    return request({
+        url: API_URL_ACC + "delete-role/" + role.id,
+        method: 'DELETE'
+    });
+}
+
+// Cập nhật role theo id
+export function updateRole(role) {
+    var raw = JSON.stringify({
+        'role_name': role.role_name,
+    });
+
+    return request({
+        url: API_URL_ACC + "update-role/" + role.id,
+        method: 'PUT',
+        body: raw,
+        redirect: 'follow'
+    });
+}
 
 // ======================================================================
 // =============================== TỈNH =================================

@@ -145,7 +145,12 @@ export function createSupplier(supplier) {
         'phone': supplier.phone,
         'code_tax': supplier.code_tax,
         'email': supplier.email,
-        'address': supplier.address
+        'address': supplier.address,
+        'province': supplier.province,
+        'district': supplier.district,
+        'wards': supplier.wards,
+        'group_supplier': supplier.group_supplier,
+        'note': supplier.note
     });
 
     return request({
@@ -163,7 +168,12 @@ export function updateSupplier(supplier) {
         'phone': supplier.phone,
         'code_tax': supplier.code_tax,
         'email': supplier.email,
-        'address': supplier.address
+        'address': supplier.address,
+        'province': supplier.province,
+        'district': supplier.district,
+        'wards': supplier.wards,
+        'group_supplier': supplier.group_supplier,
+        'note': supplier.note
     });
 
     return request({

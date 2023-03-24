@@ -43,9 +43,6 @@ const ManageSupplier = () => {
         { id: 'email', label: 'Email'},
         { id: 'phone', label: 'Phone'},
         { id: 'address', label: 'Address'},
-        { id: 'province', label: 'Province'},
-        { id: 'distric', label: 'District'},
-        { id: 'ward', label: 'Ward'},
         { id: 'group_supplier', label: 'GroupSupplier'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
@@ -170,9 +167,6 @@ const ManageSupplier = () => {
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
                                         <TableCell>{item.address}</TableCell>
-                                        <TableCell>{item.province}</TableCell>
-                                        <TableCell>{item.district}</TableCell>
-                                        <TableCell>{item.ward}</TableCell>
                                         <TableCell>{item.group_supplier}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
