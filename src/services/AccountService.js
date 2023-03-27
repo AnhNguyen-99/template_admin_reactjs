@@ -115,14 +115,15 @@ export function updateCustomer(customer) {
         'phone': customer.phone,
         'email': customer.email,
         'gender': customer.gender,
-        'date': customer.date,
+        'date': new Date(customer.date),
         'address': customer.address,
         'province': customer.province,
         'district': customer.district,
-        'ward': customer.ward,
+        'wards': customer.wards,
         'type': customer.type,
         'company_name': customer.company_name,
-        'image': customer.image
+        'image': customer.image,
+        'note': customer.note
     });
 
     return request({
@@ -188,8 +189,8 @@ export function updateUser(user) {
         'code': user.code,
         'phone': user.phone,
         'email': user.email,
-        'gender': user.gender,
-        'date': user.date,
+        'gender': user.gender === 0 ? true : false,
+        'date': (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/").reverse().join("-"),
         'address': user.address,
         'province': user.province,
         'district': user.district,
@@ -286,6 +287,32 @@ export function getListDistricByProvinceId(id){
 export function getListWardbyDistrictId(id) {
     return request({
         url: API_URL_ACC + "list-ward/" + id,
+        method: 'GET'
+    })
+}
+
+
+// =================== Permission ====================== //
+// Tạo mới chức năng role
+export function createPermission(permission){
+    var raw = JSON.stringify({
+        'function': permission.function_id,
+        'role': permission.role_id,
+        'action': permission.action
+    });
+
+    return request({
+        url: API_URL_ACC + "create-permission",
+        method: 'POST',
+        body: raw,
+        redirect: "follow"
+    });
+}
+
+// Lấy ds chức năng theo roleId
+export function getListPermission2(id) {
+    return request({
+        url: API_URL_ACC + "list-permission/" + id,
         method: 'GET'
     })
 }

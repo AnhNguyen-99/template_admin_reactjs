@@ -5,43 +5,17 @@ import Controls from 'ui-component/controls/Controls';
 import useTable from 'ui-component/useTable';
 import { useState } from 'react';
 import { gridSpacing } from 'store/constant';
+import { getListFunction, getListPermission2 } from 'services/AccountService';
 
 const FormFunctionRole = (props) => {
     const options = [
-        { id: 1, title: 'Add' },
-        { id: 2, title: 'Edit' },
-        { id: 3, title: 'Delete' },
-    ]
-
-    const data = [
-        {
-            'id': 1,
-            'functionName': 'Manages Category',
-            'apply': true,
-            'action': [1, 2]
-        },
-        {
-            'id': 2,
-            'functionName': 'Manages Role',
-            'apply': false,
-            'action': [1, 2]
-        },
-        {
-            'id': 3,
-            'functionName': 'Manage Branch',
-            'apply': true,
-            'action': [1, 2]
-        },
-        {
-            'id': 4,
-            'functionName': 'Manages User',
-            'apply': false,
-            'action': [1, 2]
-        }
+        { id: 'Add', title: 'Add' },
+        { id: 'Edit', title: 'Edit' },
+        { id: 'Delete', title: 'Delete' },
     ]
 
     const headCells = [
-        { id: 'id', label: 'RoleID' },
+        { id: 'id', label: 'ID' },
         { id: 'functionName', label: 'FunctionName' },
         { id: 'apply', label: 'Apply' },
         { id: 'actions', label: 'Actions', disableSorting: true }
@@ -54,7 +28,7 @@ const FormFunctionRole = (props) => {
     const { addOrEdit, recordForEdit } = props
 
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
-    const [records, setRecords] = useState(data)
+    const [records, setRecords] = useState([])
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -74,7 +48,6 @@ const FormFunctionRole = (props) => {
         setValues,
         errors,
         setErrors,
-        handleInputChange,
         resetForm
     } = useForm(initialFValues, true, validate);
 
@@ -87,16 +60,53 @@ const FormFunctionRole = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(records);
-        addOrEdit(records, resetForm);
+        addOrEdit(records, recordForEdit, resetForm);
     }
 
     useEffect(() => {
+        getListFunctions();
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit
             })
     }, [recordForEdit])
+
+    // Lấy ds chức năng
+    const getListFunctions = () => {
+        let lstPerimssionRole = [];
+        getListPermission2(recordForEdit.id)
+        .then(response => {
+            lstPerimssionRole = response;
+        }).catch(error => {
+            console.log(error);
+        })
+        getListFunction()
+            .then(response => {
+                let dataNew = [];
+                response.forEach(e => {
+                    let ls = [];
+                    let apply = false;
+                    let item = {};
+                    if(lstPerimssionRole.length !== 0){
+                        lstPerimssionRole.forEach(p => {
+                            if(p.function === e.id){
+                                apply = true;
+                                ls = p.action.split('|')
+                            }
+                            item = { id: e.id, name_function: e.name_function, apply: apply, action: ls };
+                            console.log(item)
+                        })
+                    }else{
+                        item = { id: e.id, name_function: e.name_function, apply: false, action: [] };
+                    }
+                    dataNew = [...dataNew, item];
+                });
+                console.log(dataNew);
+                setRecords(dataNew);
+            }).catch(error => {
+                console.log(error);
+            })
+    }
 
     const handleChange = (event) => {
         const {
@@ -116,32 +126,36 @@ const FormFunctionRole = (props) => {
             else {
                 ls = e.action;
             }
-            item = { id: e.id, functionName: e.functionName, apply: e.apply, action: ls };
+            item = { id: e.id, name_function: e.name_function, apply: e.apply, action: ls };
+            dataNew = [...dataNew, item];
+        });
+        setRecords(dataNew);
+    }
+
+    const handleCheckboxChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const {
+            target: { name },
+        } = event;
+        // Cập nhật checkbox của list
+        let dataNew = [];
+        records.forEach(e => {
+            let item = {};
+            let check = false;
+            if (e.id.toString() === name) {
+                check = value;
+            }
+            else {
+                check = e.apply;
+            }
+            item = { id: e.id, name_function: e.name_function, apply: check, action: e.action };
             dataNew = [...dataNew, item];
         });
         setRecords(dataNew);
     }
     return (
-        // <Form onSubmit={handleSubmit} style={{width: '500px'}}>
-        //     <Grid container style={{width: '500px'}}>
-        //         <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
-        //             <Controls.Input
-        //                 name="roleName"
-        //                 label="RoleName"
-        //                 value={values.roleName}
-        //                 onChange={handleInputChange}
-        //                 error={errors.roleName}
-        //             />
-        //         </Grid>
-        //         <Grid item xs={12} style={{textAlign: 'right'}}>
-        //             <div>
-        //                 <Controls.Button
-        //                     type="submit"
-        //                     text="Save" />
-        //             </div>
-        //         </Grid>
-        //     </Grid>
-        // </Form>
         <div>
             <Grid container spacing={gridSpacing} style={{ width: '800px' }}>
                 <Grid item xs={12}>
@@ -153,8 +167,8 @@ const FormFunctionRole = (props) => {
                                 recordsAfterPagingAndSorting().map(item =>
                                 (<TableRow key={item.id}>
                                     <TableCell>{item.id}</TableCell>
-                                    <TableCell>{item.functionName}</TableCell>
-                                    <TableCell><Controls.Checkbox value={item.apply} onChange={handleInputChange}></Controls.Checkbox></TableCell>
+                                    <TableCell>{item.name_function}</TableCell>
+                                    <TableCell><Controls.Checkbox value={item.apply} onChange={handleCheckboxChange} name={item.id.toString()}></Controls.Checkbox></TableCell>
                                     <TableCell><Controls.SelectMultiple options={options} value={item.action} onChange={handleChange} name={item.id.toString()}></Controls.SelectMultiple></TableCell>
                                 </TableRow>
                                 ))
@@ -167,7 +181,7 @@ const FormFunctionRole = (props) => {
                     <div>
                         <Controls.Button
                             type="submit"
-                            text="Save" onClick={handleSubmit}/>
+                            text="Save" onClick={handleSubmit} />
                     </div>
                 </Grid>
             </Grid>

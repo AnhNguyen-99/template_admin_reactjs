@@ -18,7 +18,7 @@ const FormCustomer = (props) => {
         address: '',
         province: '',
         district: '',
-        ward: '',
+        wards: '',
         image: ''
     }
 
@@ -61,7 +61,7 @@ const FormCustomer = (props) => {
     } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
-        e.preventDefault()
+        e.preventDefault();
         if (validate()) {
             addOrEdit(values, resetForm);
         }
@@ -121,7 +121,7 @@ const FormCustomer = (props) => {
         } = event;
         setValues({
             ...values,
-            province: value
+            district: value
         })
 
         // Lấy danh sách phường/xã theo id quận/huyện
@@ -133,9 +133,19 @@ const FormCustomer = (props) => {
                 customItem = {...item, id: item.id, title: item.name}
                 list = [...list, customItem];
             })
-            setLstWard(list);
+            setLstWards(list);
         }).catch(error => {
             console.log(error)
+        })
+    }
+
+    const handleInputChangeWards = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setValues({
+            ...values,
+            wards: value
         })
     }
     
@@ -205,7 +215,7 @@ const FormCustomer = (props) => {
                     <Controls.Select
                         options={lstWards}
                         value={values.wards}
-                        onChange={handleInputChange}
+                        onChange={handleInputChangeWards}
                         name="wards"
                         label="Wards"
                     />

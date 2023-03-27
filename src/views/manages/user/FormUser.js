@@ -74,10 +74,10 @@ const FormUser = (props) => {
 
     useEffect(() => {
         if (recordForEdit != null)
+            getListProvinces();
             setValues({
                 ...recordForEdit
             })
-        getListProvinces();
     }, [recordForEdit])
 
     const getListProvinces = () => {

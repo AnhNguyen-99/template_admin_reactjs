@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FormRole from './FormRole';
 import FormFunctionRole from './FormFunctionRole';
 import { useEffect } from 'react';
-import { getListRole, createRole, updateRole, deleteRole } from 'services/AccountService';
+import { getListRole, createRole, updateRole, deleteRole, createPermission } from 'services/AccountService';
 import { showNotification } from 'services/NotificationService';
 
 const useStyles = makeStyles(theme => ({
@@ -37,25 +37,6 @@ const ManageRole = () => {
 
     const classes = useStyles();
 
-    const data = [
-        {
-            'id': 1,
-            'roleName': 'Admin'
-        },
-        {
-            'id': 2,
-            'roleName': 'Manages'
-        },
-        {
-            'id': 3,
-            'roleName': 'Employee'
-        },
-        {
-            'id': 4,
-            'roleName': 'User'
-        }
-    ]
-
     const headCells = [
         { id: 'id', label: 'STT' },
         { id: 'roleName', label: 'RoleName' },
@@ -63,6 +44,7 @@ const ManageRole = () => {
     ]
 
     const [open, setOpen] = useState(false);
+    const [openAddFunction, setOpenAddFunction] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
@@ -75,15 +57,19 @@ const ManageRole = () => {
                     getData();
                 }
             }).catch(error => {
+                console.log(error);
                 showNotification("Update Role Fail", 'danger');
             })
         } else {
             // Thêm mới role
             createRole(role)
             .then(response => {
-                showNotification("Create Role Success", 'success');
-                getData();
+                if(response !== null){
+                    showNotification("Create Role Success", 'success');
+                    getData();
+                }
             }).catch(error => {
+                console.log(error);
                 showNotification("Create Role Fail", 'danger');
             });
         }
@@ -92,12 +78,39 @@ const ManageRole = () => {
         setOpen(false)
     }
 
-    // const addFunctionRole = (lstFunction, resetForm) => {
-    //     console.log(lstFunction);
-    //     resetForm()
-    //     setRecordForEdit(null)
-    //     setOpenAddFunction(false)
-    // }
+    const addFunctionRole = (lstFunction, itemRole, resetForm) => {
+        console.log(lstFunction);
+        console.log(itemRole);
+        const lst = lstFunction.filter(f => f.apply === true);
+        console.log(lst);
+        // Call api lưu thông tin vào bảng account_permission_function
+        let lstSave = [];
+        lst.forEach(e => {
+            let item = {};
+            item = { function_id: e.id, role_id: itemRole.id, action: e.action.join('|') };
+            lstSave = [...lstSave, item];
+        });
+        console.log(lstSave);
+        let check = 0;
+        lstSave.forEach(e => {
+            createPermission(e).then(response => {
+                if (response !== null) {
+                    check +=1;
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+        })
+        console.log(check);
+        if(check === lstSave.length){
+            showNotification("Create Permission Success", 'success');
+        }else{
+            showNotification("Create Permission Fail", 'danger');
+        }
+        resetForm()
+        setRecordForEdit(null)
+        setOpenAddFunction(false)
+    }
 
     const {
         TblContainer,
@@ -113,6 +126,7 @@ const ManageRole = () => {
     }
 
     const openInPopupFunction = (item) => {
+        console.log(item)
         setRecordForEdit(item);
         setOpenAddFunction(true);
     }
@@ -124,7 +138,7 @@ const ManageRole = () => {
                 if (target.value == "")
                     return items;
                 else
-                    return items.filter(x => x.categoryName.toLowerCase().includes(target.value))
+                    return items.filter(x => x.role_name.toLowerCase().includes(target.value))
             }
         })
         // Code tìm kiếm 
@@ -135,8 +149,7 @@ const ManageRole = () => {
     }, []);
 
     const getData = () => {
-        let promise;
-        promise = getListRole()
+        getListRole()
             .then(response => {
                 setRecords(response);
             })
@@ -222,6 +235,10 @@ const ManageRole = () => {
             <Popup title="Create Role" openPopup={open} setOpenPopup={setOpen}>
                 <FormRole recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
+            </Popup>
+            <Popup title="Add Function" openPopup={openAddFunction} setOpenPopup={setOpenAddFunction}>
+                <FormFunctionRole recordForEdit={recordForEdit}
+                    addOrEdit={addFunctionRole} />
             </Popup>
         </>
     );

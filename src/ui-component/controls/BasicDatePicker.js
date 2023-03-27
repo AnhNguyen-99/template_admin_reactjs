@@ -2,6 +2,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 
 export default function BasicDatePicker(props) {
@@ -17,13 +19,13 @@ export default function BasicDatePicker(props) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DateField']}>
-        <DateField
-          variant="outlined"
+        <DatePicker
           label={label}
+          value={dayjs(value)}
           name={name}
-          value={value}
+          // defaultValue={dayjs('2022-04-17')}
           onChange={date => onChange(convertToDefEventPara(name, date))}
-          format="MM-DD-YYYY"
+          format="YYYY-MM-DD"
         />
       </DemoContainer>
     </LocalizationProvider>

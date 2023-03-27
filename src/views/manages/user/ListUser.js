@@ -53,6 +53,9 @@ const ManageUser = () => {
     const [records, setRecords] = useState([])
 
     const addOrEdit = (user, resetForm) => {
+        const dateBirth = new Date(user.date);
+        user.date = dateBirth;
+        console.log(user)
         if (user.id) {
             updateUser(user).then(response => {
                 if (response !== null) {
@@ -82,6 +85,7 @@ const ManageUser = () => {
 
     const openInPopup = (item) => {
         console.log(item);
+        item.gender = item.gender !== null ? item.gender === false ? 0 : 1 : '';
         setRecordForEdit(item);
         setOpen(true);
     }
@@ -163,7 +167,7 @@ const ManageUser = () => {
                                         <TableCell>{item.code}</TableCell>
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.gender}</TableCell>
+                                        <TableCell>{item.gender !== null ? item.gender === false ? 'Nam' : 'Nữ' : ''}</TableCell>
                                         <TableCell>{item.date}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>

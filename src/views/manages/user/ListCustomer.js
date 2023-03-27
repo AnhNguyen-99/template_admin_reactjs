@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { showNotification } from 'services/NotificationService';
 import { getListCustomer, createCustomer, deleteCustomer, updateCustomer } from 'services/AccountService';
 import FormCustomer from './FormCustomer';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -83,7 +84,8 @@ const ManageCustomer = () => {
     } = useTable(records, headCells, filterFn);
 
     const openInPopup = (item) => {
-        console.log(item);
+        item.date = item.date !== null ? datejs(item.date) : item.date;
+        console.log(item)
         setRecordForEdit(item);
         setOpen(true);
     }
