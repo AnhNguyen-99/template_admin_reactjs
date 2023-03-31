@@ -19,7 +19,8 @@ const FormCustomer = (props) => {
         province: '',
         district: '',
         wards: '',
-        image: ''
+        image: '',
+        password: ''
     }
 
     const genders = [

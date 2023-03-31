@@ -14,9 +14,9 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import FormSupplier from './FormSupplier';
 import { showNotification } from 'services/NotificationService';
-import { getListSupplier, createSupplier, deleteSupplier, updateSupplier } from 'services/ProductService';
+import {  updateSale, createSales, deleteSales, getListSales } from 'services/ProductService';
+import FormSale from './FormSales';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,18 +32,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageSupplier = () => {
+const ManageSales = () => {
 
     const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'nameSupplier', label: 'NameSupplier' },
-        { id: 'codeTax', label: 'CodeTax'},
-        { id: 'email', label: 'Email'},
-        { id: 'phone', label: 'Phone'},
-        { id: 'address', label: 'Address'},
-        // { id: 'group_supplier', label: 'GroupSupplier'},
+        { id: 'sale_code', label: 'SaleCode' },
+        { id: 'Sale', label: 'Sale'},
+        { id: 'date_sale', label: 'DateSale'},
+        { id: 'finish_sale', label: 'FinishSale'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -52,18 +50,18 @@ const ManageSupplier = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (supplier, resetForm) => {
-        if (supplier.id) {
-            updateSupplier(supplier).then(response => {
+    const addOrEdit = (sales, resetForm) => {
+        if (sales.id) {
+            updateSale(sales).then(response => {
                 if (response !== null) {
-                    showNotification("Update Supplier Success", 'success');
+                    showNotification("Update Sale Success", 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Supplier Fail", 'danger');
+                showNotification("Update Sale Fail", 'danger');
             })
         } else {
-            createSupplier(supplier)
+            createSales(sales)
             .then(response => {
                 showNotification("Create Supplier Success", 'success');
                 getData();
@@ -98,7 +96,7 @@ const ManageSupplier = () => {
                     return items;
                 }
                 else{
-                    return items.filter(x => x.supplier_name.toLowerCase().includes(target.value.toLowerCase()))
+                    return items.filter(x => x.sale_code.toLowerCase().includes(target.value.toLowerCase()))
                 }
             }
         })
@@ -109,7 +107,7 @@ const ManageSupplier = () => {
     }, [])
 
     const getData = () => {
-        getListSupplier()
+        getListSales()
             .then(response => {
                 setRecords(response);
             }).catch(error => {
@@ -117,15 +115,15 @@ const ManageSupplier = () => {
             });
     };
 
-    const deleteSuppliers = (item) => {
-        deleteSupplier(item).then(response => {
+    const deleteSale = (item) => {
+        deleteSales(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Supplier Success", 'success');
+                showNotification("Delete Sale Success", 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification("Delete Supplier Fail", 'danger');
+            showNotification("Delete Sale Fail", 'danger');
         });
     }
 
@@ -162,12 +160,10 @@ const ManageSupplier = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.supplier_name}</TableCell>
-                                        <TableCell>{item.code_tax}</TableCell>
-                                        <TableCell>{item.email}</TableCell>
-                                        <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.address}</TableCell>
-                                        {/* <TableCell>{item.group_supplier}</TableCell> */}
+                                        <TableCell>{item.sale_code}</TableCell>
+                                        <TableCell>{item.sales}</TableCell>
+                                        <TableCell>{item.date_sale}</TableCell>
+                                        <TableCell>{item.finish_sale}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
@@ -177,7 +173,7 @@ const ManageSupplier = () => {
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick = {() => { deleteSuppliers(item) }}
+                                                onClick = {() => { deleteSale(item) }}
                                             >
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
@@ -192,11 +188,11 @@ const ManageSupplier = () => {
                 </Grid>
             </MainCard>
             <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
-                <FormSupplier recordForEdit={recordForEdit}
+                <FormSale recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageSupplier;
+export default ManageSales;

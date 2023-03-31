@@ -17,7 +17,6 @@ import { useEffect } from 'react';
 import { showNotification } from 'services/NotificationService';
 import { getListCustomer, createCustomer, deleteCustomer, updateCustomer } from 'services/AccountService';
 import FormCustomer from './FormCustomer';
-import dayjs from 'dayjs';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -56,6 +55,8 @@ const ManageCustomer = () => {
     const [records, setRecords] = useState([])
 
     const addOrEdit = (customer, resetForm) => {
+        const dateBirth = new Date(customer.date);
+        customer.date = dateBirth;
         if (customer.id) {
             updateCustomer(customer).then(response => {
                 if (response !== null) {
@@ -84,8 +85,8 @@ const ManageCustomer = () => {
     } = useTable(records, headCells, filterFn);
 
     const openInPopup = (item) => {
-        item.date = item.date !== null ? datejs(item.date) : item.date;
-        console.log(item)
+        console.log(item);
+        item.gender = item.gender !== null ? item.gender === false ? 0 : 1 : '';
         setRecordForEdit(item);
         setOpen(true);
     }
@@ -99,7 +100,7 @@ const ManageCustomer = () => {
                     return items;
                 }
                 else{
-                    return items.filter(x => x.supplier_name.toLowerCase().includes(target.value.toLowerCase()))
+                    return items.filter(x => x.username.toLowerCase().includes(target.value.toLowerCase()))
                 }
             }
         })

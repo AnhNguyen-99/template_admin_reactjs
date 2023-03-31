@@ -14,9 +14,9 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import FormSupplier from './FormSupplier';
 import { showNotification } from 'services/NotificationService';
-import { getListSupplier, createSupplier, deleteSupplier, updateSupplier } from 'services/ProductService';
+import FormWarehouse from './FormWarehouse';
+import { getlistImport, updateImport, deleteImport, createImport } from 'services/ProductService';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,18 +32,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageSupplier = () => {
-
+const ManageWarehouse = () => {
+    
     const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'nameSupplier', label: 'NameSupplier' },
-        { id: 'codeTax', label: 'CodeTax'},
-        { id: 'email', label: 'Email'},
-        { id: 'phone', label: 'Phone'},
-        { id: 'address', label: 'Address'},
-        // { id: 'group_supplier', label: 'GroupSupplier'},
+        { id: 'code', label: 'CodeImport' },
+        { id: 'supllier_name', label: 'SupplierName'},
+        { id: 'total_price', label: 'TotalPrice'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -52,25 +49,27 @@ const ManageSupplier = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (supplier, resetForm) => {
-        if (supplier.id) {
-            updateSupplier(supplier).then(response => {
+    const addOrEdit = (imports, resetForm) => {
+        if (imports.id) {
+            updateImport(imports).then(response => {
                 if (response !== null) {
-                    showNotification("Update Supplier Success", 'success');
+                    showNotification("Update Import Warehouse Success", 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Supplier Fail", 'danger');
+                showNotification("Update Import Warehouse Fail", 'danger')
             })
         } else {
-            createSupplier(supplier)
+            // Thêm mới category
+            createImport(imports)
             .then(response => {
-                showNotification("Create Supplier Success", 'success');
+                showNotification('Create Import Warehouse Success', 'success');
                 getData();
             }).catch(error => {
-                showNotification("Create Supplier Fail", 'danger');
+                showNotification('Create Import Warehouse Fail', 'danger');
             });
         }
+
         resetForm()
         setRecordForEdit(null)
         setOpen(false)
@@ -97,11 +96,12 @@ const ManageSupplier = () => {
                     console.log(items);
                     return items;
                 }
-                else{
-                    return items.filter(x => x.supplier_name.toLowerCase().includes(target.value.toLowerCase()))
+                else {
+                    return items.filter(x => x.code.toLowerCase().includes(target.value.toLowerCase()))
                 }
             }
         })
+        // Code tìm kiếm 
     }
 
     useEffect(() => {
@@ -109,34 +109,36 @@ const ManageSupplier = () => {
     }, [])
 
     const getData = () => {
-        getListSupplier()
+        let promise;
+        promise = getlistImport()
             .then(response => {
                 setRecords(response);
-            }).catch(error => {
-                console.log(error)
+            })
+            .catch(error => {
+                console.log(error);
             });
-    };
+    }
 
-    const deleteSuppliers = (item) => {
-        deleteSupplier(item).then(response => {
+    const deleteImports = (item) => {
+        deleteImport(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Supplier Success", 'success');
+                showNotification("Delete Import Warehouse Success", 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification("Delete Supplier Fail", 'danger');
+            showNotification('Delete Import Warehouse Fali', 'danger');
         });
     }
 
     return (
         <>
-            <MainCard title="List Supplier">
+            <MainCard title="List Category">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
                         className={classes.searchInput}
-                        placeholder="Search ...."
+                        placeholder= "Search ...."
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
                                 <IconSearch />
@@ -153,7 +155,7 @@ const ManageSupplier = () => {
                     />
                 </Toolbar>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} style={{overflow: 'auto'}}>
+                    <Grid item xs={12}>
                         {/* === Table === */}
                         <TblContainer>
                             <TblHead />
@@ -162,23 +164,19 @@ const ManageSupplier = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{item.code}</TableCell>
                                         <TableCell>{item.supplier_name}</TableCell>
-                                        <TableCell>{item.code_tax}</TableCell>
-                                        <TableCell>{item.email}</TableCell>
-                                        <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.address}</TableCell>
-                                        {/* <TableCell>{item.group_supplier}</TableCell> */}
+                                        <TableCell>{item.total_price}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
                                                 onClick={() => { openInPopup(item) }}
-                                            >
+                                                >
                                                 <IconEdit />
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick = {() => { deleteSuppliers(item) }}
-                                            >
+                                                onClick={() => {deleteImports(item) }}>
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
@@ -191,12 +189,12 @@ const ManageSupplier = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
-                <FormSupplier recordForEdit={recordForEdit}
+            <Popup title="Create Import Warehouse" openPopup={open} setOpenPopup={setOpen}>
+                <FormWarehouse recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageSupplier;
+export default ManageWarehouse;

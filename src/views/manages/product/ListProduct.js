@@ -14,9 +14,10 @@ import { makeStyles } from '@mui/styles';
 import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-import FormSupplier from './FormSupplier';
 import { showNotification } from 'services/NotificationService';
-import { getListSupplier, createSupplier, deleteSupplier, updateSupplier } from 'services/ProductService';
+import { createProduct, deleteProduct, getlistProduct } from 'services/ProductService';
+import FormProduct from './FormProduct';
+// import dayjs from 'dayjs';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -32,18 +33,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageSupplier = () => {
+const ManageProduct = () => {
 
     const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'nameSupplier', label: 'NameSupplier' },
-        { id: 'codeTax', label: 'CodeTax'},
-        { id: 'email', label: 'Email'},
-        { id: 'phone', label: 'Phone'},
-        { id: 'address', label: 'Address'},
-        // { id: 'group_supplier', label: 'GroupSupplier'},
+        { id: 'name', label: 'ProductName' },
+        { id: 'product_code', label: 'ProductCode'},
+        { id: 'price', label: 'Price'},
+        { id: 'unit', label: 'Unit'},
+        { id: 'category', label: 'Category'},
+        { id: 'branch', label: 'Branch'},
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -52,23 +53,20 @@ const ManageSupplier = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (supplier, resetForm) => {
-        if (supplier.id) {
-            updateSupplier(supplier).then(response => {
+    const addOrEdit = (product, resetForm) => {
+        if (product.id) {
+            updateProduct(product).then(response => {
                 if (response !== null) {
-                    showNotification("Update Supplier Success", 'success');
+                    showNotification("Update Product Success", 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update Supplier Fail", 'danger');
+                showNotification("Update Product Fail", 'danger');
             })
         } else {
-            createSupplier(supplier)
+            createProduct(product)
             .then(response => {
-                showNotification("Create Supplier Success", 'success');
-                getData();
-            }).catch(error => {
-                showNotification("Create Supplier Fail", 'danger');
+                showNotification("Create Prodcuct Success", 'success');
             });
         }
         resetForm()
@@ -84,7 +82,7 @@ const ManageSupplier = () => {
     } = useTable(records, headCells, filterFn);
 
     const openInPopup = (item) => {
-        console.log(item);
+        console.log(item)
         setRecordForEdit(item);
         setOpen(true);
     }
@@ -98,7 +96,7 @@ const ManageSupplier = () => {
                     return items;
                 }
                 else{
-                    return items.filter(x => x.supplier_name.toLowerCase().includes(target.value.toLowerCase()))
+                    return items.filter(x => x.name.toLowerCase().includes(target.value.toLowerCase()))
                 }
             }
         })
@@ -109,7 +107,7 @@ const ManageSupplier = () => {
     }, [])
 
     const getData = () => {
-        getListSupplier()
+        getlistProduct()
             .then(response => {
                 setRecords(response);
             }).catch(error => {
@@ -117,21 +115,21 @@ const ManageSupplier = () => {
             });
     };
 
-    const deleteSuppliers = (item) => {
-        deleteSupplier(item).then(response => {
+    const deleteProducts = (item) => {
+        deleteProduct(item).then(response => {
             if (response !== null) {
-                showNotification("Delete Supplier Success", 'success');
+                showNotification("Delete Product Success", 'success');
                 getData();
             }
         }).catch(error => {
             console.log(error);
-            showNotification("Delete Supplier Fail", 'danger');
+            showNotification("Delete Product Fail", 'danger');
         });
     }
 
     return (
         <>
-            <MainCard title="List Supplier">
+            <MainCard title="List Product">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
@@ -162,12 +160,12 @@ const ManageSupplier = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.supplier_name}</TableCell>
-                                        <TableCell>{item.code_tax}</TableCell>
-                                        <TableCell>{item.email}</TableCell>
-                                        <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.address}</TableCell>
-                                        {/* <TableCell>{item.group_supplier}</TableCell> */}
+                                        <TableCell>{item.name}</TableCell>
+                                        <TableCell>{item.product_code}</TableCell>
+                                        <TableCell>{item.price}</TableCell>
+                                        <TableCell>{item.unit}</TableCell>
+                                        <TableCell>{item.category}</TableCell>
+                                        <TableCell>{item.branch}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
@@ -177,7 +175,7 @@ const ManageSupplier = () => {
                                             </Controls.ActionButton>
                                             <Controls.ActionButton
                                                 color="secondary"
-                                                onClick = {() => { deleteSuppliers(item) }}
+                                                onClick = {() => { deleteProducts(item) }}
                                             >
                                                 <IconTrash color='red' />
                                             </Controls.ActionButton>
@@ -191,12 +189,12 @@ const ManageSupplier = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
-                <FormSupplier recordForEdit={recordForEdit}
+            <Popup title="Create Product" openPopup={open} setOpenPopup={setOpen}>
+                <FormProduct recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageSupplier;
+export default ManageProduct;

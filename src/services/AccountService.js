@@ -123,7 +123,8 @@ export function updateCustomer(customer) {
         'type': customer.type,
         'company_name': customer.company_name,
         'image': customer.image,
-        'note': customer.note
+        'note': customer.note,
+        'password': customer.password
     });
 
     return request({
@@ -196,7 +197,8 @@ export function updateUser(user) {
         'district': user.district,
         'wards': user.wards,
         'note': user.note,
-        'image': user.image
+        'image': user.image,
+        'password': user.password
     });
 
     return request({

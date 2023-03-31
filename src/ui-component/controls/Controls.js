@@ -6,6 +6,8 @@ import Button from "./Button";
 import ActionButton from "./ActionButton";
 import SelectMultiple from "./SelectMultiple";
 import BasicDatePicker from "./BasicDatePicker";
+import TextArea from "./TextArea";
+import Image from "./ImageList";
 
 const Controls = {
     Input,
@@ -15,7 +17,9 @@ const Controls = {
     Button,
     ActionButton,
     SelectMultiple,
-    BasicDatePicker
+    BasicDatePicker,
+    TextArea,
+    Image
 }
 
 export default Controls;

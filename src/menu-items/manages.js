@@ -8,7 +8,9 @@ import {
     IconBriefcase,
     IconUsers,
     IconUser,
-    IconMenu2
+    IconMenu2, 
+    IconBuildingWarehouse,
+    IconDiscount
 } from '@tabler/icons';
 
 // constant
@@ -22,7 +24,9 @@ const icons = {
     IconBriefcase,
     IconUsers,
     IconUser,
-    IconMenu2
+    IconMenu2,
+    IconBuildingWarehouse,
+    IconDiscount
 };
 
 const manages = {
@@ -95,6 +99,30 @@ const manages = {
             icon: icons.IconBriefcase,
             breadcrumbs: false
         },
+        {
+            id: 'manage_product',
+            title: 'Manage Product',
+            type: 'item',
+            url: '/manage/product',
+            icon: icons.IconShadow,
+            breadcrumbs: true
+        },
+        {
+            id: 'import_warehouse',
+            title: "Import Warehouse",
+            type: 'item',
+            url: '/manage/warehouse',
+            icon: icons.IconBuildingWarehouse,
+            breadcrumbs: true
+        },
+        {
+            id: 'manage_sales',
+            title: "Manage Sales",
+            type: 'item',
+            url: '/manage/sales',
+            icon: icons.IconDiscount,
+            breadcrumbs: true
+        }
     ]
 };
 

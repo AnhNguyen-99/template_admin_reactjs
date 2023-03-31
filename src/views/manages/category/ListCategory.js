@@ -137,7 +137,7 @@ const ManageCategory = () => {
             }
         }).catch(error => {
             console.log(error);
-            showNotification('Delete Category Success', 'danger');
+            showNotification('Delete Category Fail', 'danger');
         });
     }
 
