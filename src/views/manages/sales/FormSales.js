@@ -70,14 +70,14 @@ const FormSale = (props) => {
                         onChange={handleInputChange}
                         error={errors.sale}
                     />
-                    <Controls.Input
+                    <Controls.DateTimePicker
                         name="date_sale"
                         label="DateSale"
                         value={values.date_sale}
                         onChange={handleInputChange}
                         error={errors.date_sale}
                     />
-                    <Controls.Input
+                    <Controls.DateTimePicker
                         name="finish_sale"
                         label="FinishSale"
                         value={values.finish_sale}

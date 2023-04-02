@@ -127,6 +127,11 @@ const ManageSales = () => {
         });
     }
 
+    const convertDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        return date.toISOString().split('T')[0] + ' '
+        + date.toTimeString().split(' ')[0];
+    }
     return (
         <>
             <MainCard title="List Supplier">
@@ -162,8 +167,8 @@ const ManageSales = () => {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{item.sale_code}</TableCell>
                                         <TableCell>{item.sales}</TableCell>
-                                        <TableCell>{item.date_sale}</TableCell>
-                                        <TableCell>{item.finish_sale}</TableCell>
+                                        <TableCell>{item.date_sale !== null ? convertDateTime(item.date_sale) : ''}</TableCell>
+                                        <TableCell>{item.finish_sale !== null ? convertDateTime(item.finish_sale) : ''}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

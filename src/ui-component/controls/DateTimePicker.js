@@ -1,14 +1,13 @@
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimeField } from "@mui/x-date-pickers";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 export default function DateTimePicker(props) {
-    const { name, label, value, onChange }= props;
+    const { name, label, value, onChange } = props;
 
-    const convertToDefEventPara  = (name, value) => ({
+    const convertToDefEventPara = (name, value) => ({
         target: {
             name, value
         }
@@ -16,15 +15,14 @@ export default function DateTimePicker(props) {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateTimeField']}>
-                <DatePicker 
+                <MobileDateTimePicker
                     label={label}
                     value={dayjs(value)}
                     name={name}
-                    onChange={date => onChange(convertToDefEventPara(name,date))}
-                    format="YYYY-MM-DD h:m:s"
+                    onChange={date => onChange(convertToDefEventPara(name, date))}
+                    format="YYYY-MM-DD HH:MM:ss"
+                    defaultValue={dayjs('2022-04-17T15:30')}
                 />
-            </DemoContainer>
         </LocalizationProvider>
     )
 }

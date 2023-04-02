@@ -8,6 +8,7 @@ import SelectMultiple from "./SelectMultiple";
 import BasicDatePicker from "./BasicDatePicker";
 import TextArea from "./TextArea";
 import Image from "./ImageList";
+import DateTimePicker from "./DateTimePicker";
 
 const Controls = {
     Input,
@@ -19,7 +20,8 @@ const Controls = {
     SelectMultiple,
     BasicDatePicker,
     TextArea,
-    Image
+    Image,
+    DateTimePicker
 }
 
 export default Controls;

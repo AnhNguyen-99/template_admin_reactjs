@@ -1,15 +1,19 @@
 import React from "react";
-import { TextareaAutosize } from "@mui/material";
+import { TextField } from '@mui/material';
+
 
 export default function TextArea(props) {
-    const { minRows, maxRows, value, error = null, placeholder, onChange, ...other} = props;
+    const { name, label, value, maxRows, type, error = null, placeholder, onChange, ...other } = props;
     return (
-        <TextareaAutosize 
-            variant="standard"
+        <TextField
+            variant="outlined"
+            label={label}
+            name={name}
             value={value}
-            maxRows={maxRows}
-            minRows={minRows}
+            type={type}
             onChange={onChange}
+            multiline
+            minRows={5}
             placeholder={placeholder || ''}
             {...other}
             {...(error && { error: true, helperText: error })}

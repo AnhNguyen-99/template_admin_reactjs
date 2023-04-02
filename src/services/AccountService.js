@@ -185,6 +185,9 @@ export function getListUser() {
 
 // Cập nhật tài khoản user
 export function updateUser(user) {
+    const date = (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/").reverse().join("-");
+    console.log((new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/"));
+    console.log(typeof date)
     var raw = JSON.stringify({
         'username': user.username,
         'code': user.code,
