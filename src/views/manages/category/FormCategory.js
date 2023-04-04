@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { Grid } from '@mui/material';
 import { useForm, Form } from 'ui-component/useForm';
 import Controls from 'ui-component/controls/Controls';
+import { getlistCategory } from 'services/ProductService';
+import { useState } from 'react';
 
 const FormCategory = (props) => {
     
@@ -24,6 +26,8 @@ const FormCategory = (props) => {
             return Object.values(temp).every(x => x == "")
     }
 
+    const [lstCategory, setLstCategory] = useState([])
+
     const {
         values,
         setValues,
@@ -41,21 +45,38 @@ const FormCategory = (props) => {
     }
 
     useEffect(() => {
+        handleChangeCategory();
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit
             })
     }, [recordForEdit])
 
+    const handleChangeCategory = () => {
+        getlistCategory().
+        then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id, title: item.category_name};
+                list = [...list, customItem];
+            });
+            setLstCategory(list);
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container>
+            <Grid container style={{ width: '500px'}}>
                 <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
-                    <Controls.Input
+                    <Controls.Select
+                        options={lstCategory}
                         name="category_name"
                         label="CategoryName"
                         value={values.category_name}
-                        onChange={handleInputChange}
+                        onChange={handleChangeCategory}
                         error={errors.category_name}
                     />
                     <Controls.Input

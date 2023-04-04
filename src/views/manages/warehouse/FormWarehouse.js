@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import { useForm, Form } from "ui-component/useForm";
 import Controls from "ui-component/controls/Controls";
+import { getListSupplier } from "services/ProductService";
+import { useState } from "react";
 
 const FormWarehouse = (props) => {
     const initialFValues = {
         code: '',
-        supplier_code: '',
+        supplier: '',
         total_price: ''
     }
 
@@ -14,8 +16,8 @@ const FormWarehouse = (props) => {
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
-        if ('name' in fieldValues)
-            temp.name = fieldValues.name ? "" : "This fields is required."
+        if ('supplier' in fieldValues)
+            temp.supplier = fieldValues.supplier ? "" : "This fields is required."
         
         setErrors({
             ...temp
@@ -24,6 +26,8 @@ const FormWarehouse = (props) => {
         if (fieldValues == values)
             return Object.values(temp).every(x => x == "")
     }
+
+    const [lstSupplier, setLstSupplier] = useState([])
 
     const {
         values,
@@ -41,12 +45,29 @@ const FormWarehouse = (props) => {
         }
     }
 
-    useEffect(() => {
+    useEffect(() => {  
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit
             })
+        handleChangeSupplier();
     }, [recordForEdit])
+
+    const handleChangeSupplier = () => {
+        getListSupplier()
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id, title: item.supplier_name}
+                list = [...list, customItem];
+            });
+            setLstSupplier(list);
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -59,12 +80,12 @@ const FormWarehouse = (props) => {
                         onChange={handleInputChange}
                         error={errors.code}
                     />
-                    <Controls.Input
-                        name="supplier_name"
+                    <Controls.Select
+                        options={lstSupplier}
+                        name="supplier"
                         label="SupplierName"
-                        value={values.supplier_name}
-                        onChange={handleInputChange}
-                        error={errors.supplier_name}
+                        value={values.supplier}
+                        onChange={handleChangeSupplier}
                     />
                     <Controls.Input
                         name="total_price"

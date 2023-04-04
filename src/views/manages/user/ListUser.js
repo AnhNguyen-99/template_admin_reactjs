@@ -130,6 +130,11 @@ const ManageUser = () => {
         });
     }
 
+    const convertDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        return date.toISOString().split('T')[0];
+    }
+
     return (
         <>
             <MainCard title="List Employee">
@@ -168,7 +173,7 @@ const ManageUser = () => {
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
                                         <TableCell>{item.gender !== null ? item.gender === false ? 'Nam' : 'Nữ' : ''}</TableCell>
-                                        <TableCell>{item.date !== null ? (new Date(item.date).toLocaleDateString('zh-Hans-CN')) : ''}</TableCell>
+                                        <TableCell>{item.date !== null ? convertDateTime(item.date) : ''}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton

@@ -269,7 +269,7 @@ export function deleteProduct(product) {
 export function createImport(imports) {
     var raw = JSON.stringify({
         "code": imports.code,
-        "supplier_code": imports.supplier_code,
+        "supplier": imports.supplier,
         "total_price": imports.total_price
     });
 

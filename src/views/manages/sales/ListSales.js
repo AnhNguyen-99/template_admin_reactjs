@@ -39,7 +39,7 @@ const ManageSales = () => {
     const headCells = [
         { id: 'id', label: 'STT' },
         { id: 'sale_code', label: 'SaleCode' },
-        { id: 'Sale', label: 'Sale'},
+        { id: 'Sale', label: 'Sale (%)'},
         { id: 'date_sale', label: 'DateSale'},
         { id: 'finish_sale', label: 'FinishSale'},
         { id: 'actions', label: 'Actions', disableSorting: true }

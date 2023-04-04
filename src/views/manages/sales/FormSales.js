@@ -65,7 +65,7 @@ const FormSale = (props) => {
                     />
                     <Controls.Input
                         name="sale"
-                        label="Sale"
+                        label="Sale (%)"
                         value={values.sale}
                         onChange={handleInputChange}
                         error={errors.sale}
