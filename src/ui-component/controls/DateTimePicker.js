@@ -20,8 +20,7 @@ export default function DateTimePicker(props) {
                     value={dayjs(value)}
                     name={name}
                     onChange={date => onChange(convertToDefEventPara(name, date))}
-                    format="YYYY-MM-DD HH:MM:ss"
-                    // defaultValue={dayjs('2022-04-17T15:30')}
+                    format="YYYY-MM-DD HH:mm:ss"
                 />
         </LocalizationProvider>
     )

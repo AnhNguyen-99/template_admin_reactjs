@@ -59,11 +59,13 @@ const FormSupplier = (props) => {
     }
 
     useEffect(() => {
+        getListProvinces();
         if (recordForEdit != null)
+            getLstDistricByProvinceId(recordForEdit.province);
+            getLstWardByDistrictId(recordForEdit.district);
             setValues({
                 ...recordForEdit
             })
-        getListProvinces();
     }, [recordForEdit])
 
     const getListProvinces = () => {
@@ -88,22 +90,14 @@ const FormSupplier = (props) => {
         } = event;
         setValues({
             ...values,
-            province: value
+            province: value,
+            wards: '',
+            district: ''
+
         })
         // Lấy ds huyện theo id tỉnh
-        getListDistricByProvinceId(value)
-        .then(response => {
-            let list = [];
-            response.forEach(item => {
-                let customItem = {};
-                customItem = {...item, id: item.id , title: item.name};
-                list = [...list, customItem];
-            });
-            setLstDistrict(list);
-        }).catch(error => {
-            console.log(error)
-        });
-
+        getLstDistricByProvinceId(value);
+        
         // // Lấy danh sách phường/xã theo id quận/huyện
         // getListWardbyDistrictId(value)
         // .then(response => {
@@ -117,6 +111,22 @@ const FormSupplier = (props) => {
         // }).catch(error => {
         //     console.log(error)
         // })
+    }
+
+    // Lấy ds huyện theo id Tỉnh
+    const getLstDistricByProvinceId = (id) => {
+        getListDistricByProvinceId(id)
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id , title: item.name};
+                list = [...list, customItem];
+            });
+            setLstDistrict(list);
+        }).catch(error => {
+            console.log(error)
+        });
     }
     
     const handleChangeDistrict = (event) => {
@@ -143,6 +153,20 @@ const FormSupplier = (props) => {
         })
     }
 
+    const getLstWardByDistrictId = (id) => {
+        getListWardbyDistrictId(id)
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id, title: item.name}
+                list = [...list, customItem];
+            })
+            setLstWards(list);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container style={{ width: '700px' }}>

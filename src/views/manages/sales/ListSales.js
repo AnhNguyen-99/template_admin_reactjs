@@ -132,6 +132,27 @@ const ManageSales = () => {
         return date.toISOString().split('T')[0] + ' '
         + date.toTimeString().split(' ')[0];
     }
+
+    const padTo2Digits = (num) => {
+        return num.toString().padStart(2, '0');
+      }
+
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        return (
+            [
+              date.getFullYear(),
+              padTo2Digits(date.getMonth() + 1),
+              padTo2Digits(date.getDate()),
+            ].join('-') +
+            ' ' +
+            [
+              padTo2Digits(date.getHours()),
+              padTo2Digits(date.getMinutes()),
+              padTo2Digits(date.getSeconds()),
+            ].join(':')
+          );   
+    }
     return (
         <>
             <MainCard title="List Supplier">
@@ -167,8 +188,8 @@ const ManageSales = () => {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{item.sale_code}</TableCell>
                                         <TableCell>{item.sales}</TableCell>
-                                        <TableCell>{item.date_sale !== null ? convertDateTime(item.date_sale) : ''}</TableCell>
-                                        <TableCell>{item.finish_sale !== null ? convertDateTime(item.finish_sale) : ''}</TableCell>
+                                        <TableCell>{item.date_sale !== null ? formatDateTime(item.date_sale) : ''}</TableCell>
+                                        <TableCell>{item.finish_sale !== null ? formatDateTime(item.finish_sale) : ''}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

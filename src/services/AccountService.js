@@ -185,23 +185,25 @@ export function getListUser() {
 
 // Cập nhật tài khoản user
 export function updateUser(user) {
-    const date = (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/").reverse().join("-");
-    console.log((new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/"));
-    console.log(typeof date)
+    const date = (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/");
+    const date1Str = date[0] < 10 ? '0' + date[0] : date[0];
+    const date2Str = date[1] < 10 ? '0' + date[1] : date[1];
+    const date3Str = date[2] < 10 ? '0' + date[2] : date[2];
+    const dateStr = date3Str + '-' + date2Str + '-' + date1Str;
     var raw = JSON.stringify({
         'username': user.username,
         'code': user.code,
         'phone': user.phone,
         'email': user.email,
         'gender': user.gender === 0 ? true : false,
-        'date': (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/").reverse().join("-"),
+        'date': dateStr,
         'address': user.address,
         'province': user.province,
         'district': user.district,
         'wards': user.wards,
         'note': user.note,
         'image': user.image,
-        'password': user.password
+        'password': '123456'
     });
 
     return request({

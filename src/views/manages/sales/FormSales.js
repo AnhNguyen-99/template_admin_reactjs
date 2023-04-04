@@ -64,11 +64,11 @@ const FormSale = (props) => {
                         error={errors.sale_code}
                     />
                     <Controls.Input
-                        name="sale"
+                        name="sales"
                         label="Sale (%)"
-                        value={values.sale}
+                        value={values.sales}
                         onChange={handleInputChange}
-                        error={errors.sale}
+                        error={errors.sales}
                     />
                     <Controls.DateTimePicker
                         name="date_sale"
