@@ -60,12 +60,13 @@ const FormSupplier = (props) => {
 
     useEffect(() => {
         getListProvinces();
-        if (recordForEdit != null)
+        if (recordForEdit !== null){
             getLstDistricByProvinceId(recordForEdit.province);
             getLstWardByDistrictId(recordForEdit.district);
             setValues({
                 ...recordForEdit
             })
+        }
     }, [recordForEdit])
 
     const getListProvinces = () => {
