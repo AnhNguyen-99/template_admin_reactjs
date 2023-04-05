@@ -20,7 +20,6 @@ const FormCustomer = (props) => {
         district: '',
         wards: '',
         image: '',
-        password: ''
     }
 
     const genders = [
@@ -62,19 +61,21 @@ const FormCustomer = (props) => {
     } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
-        e.preventDefault();
+        e.preventDefault()
         if (validate()) {
             addOrEdit(values, resetForm);
         }
     }
 
     useEffect(() => {
-        if (recordForEdit != null)
+        getListProvinces();
+        if (recordForEdit !== null){
+            getLstDistricByProvinceId(recordForEdit.province);
+            getLstWardByDistrictId(recordForEdit.district);
             setValues({
                 ...recordForEdit
             })
-        
-        getListProvinces();
+        }
     }, [recordForEdit])
 
     const getListProvinces = () => {
@@ -83,13 +84,14 @@ const FormCustomer = (props) => {
             let list = [];
             response.forEach(item => {
                 let customItem = {};
-                customItem = {...item, id: item.id, title: item.name};
+                customItem = {...item, id: item.id , title: item.name};
                 list = [...list, customItem];
             });
             setLstProvince(list);
         }).catch(error => {
-            console.log(error);
+            console.log(error)
         });
+
     }
 
     const handleChangeProvince = (event) => {
@@ -98,24 +100,30 @@ const FormCustomer = (props) => {
         } = event;
         setValues({
             ...values,
-            province: value
-        })
+            province: value,
+            wards: '',
+            district: ''
 
-        // Lấy danh sách huyện theo id tỉnh
-        getListDistricByProvinceId(value)
+        })
+        getLstDistricByProvinceId(value);
+    }
+
+    // Lấy ds huyện theo id Tỉnh
+    const getLstDistricByProvinceId = (id) => {
+        getListDistricByProvinceId(id)
         .then(response => {
             let list = [];
             response.forEach(item => {
                 let customItem = {};
-                customItem = {...item, id: item.id, title: item.name};
+                customItem = {...item, id: item.id , title: item.name};
                 list = [...list, customItem];
             });
             setLstDistrict(list);
         }).catch(error => {
-            console.log(error);
+            console.log(error)
         });
     }
-
+    
     const handleChangeDistrict = (event) => {
         const {
             target: { value },
@@ -140,13 +148,18 @@ const FormCustomer = (props) => {
         })
     }
 
-    const handleInputChangeWards = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setValues({
-            ...values,
-            wards: value
+    const getLstWardByDistrictId = (id) => {
+        getListWardbyDistrictId(id)
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id, title: item.name}
+                list = [...list, customItem];
+            })
+            setLstWards(list);
+        }).catch(error => {
+            console.log(error)
         })
     }
     
@@ -216,7 +229,7 @@ const FormCustomer = (props) => {
                     <Controls.Select
                         options={lstWards}
                         value={values.wards}
-                        onChange={handleInputChangeWards}
+                        onChange={handleInputChange}
                         name="wards"
                         label="Wards"
                     />

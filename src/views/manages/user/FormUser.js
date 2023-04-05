@@ -18,7 +18,7 @@ const FormUser = (props) => {
         address: '',
         province: '',
         district: '',
-        ward: '',
+        wards: '',
         image: ''
     }
 
@@ -73,11 +73,14 @@ const FormUser = (props) => {
     }
 
     useEffect(() => {
-        if (recordForEdit != null)
-            getListProvinces();
+        getListProvinces();
+        if (recordForEdit !== null){
+            getLstDistricByProvinceId(recordForEdit.province);
+            getLstWardByDistrictId(recordForEdit.district);
             setValues({
                 ...recordForEdit
             })
+        }
     }, [recordForEdit])
 
     const getListProvinces = () => {
@@ -102,10 +105,17 @@ const FormUser = (props) => {
         } = event;
         setValues({
             ...values,
-            province: value
+            province: value,
+            wards: '',
+            district: ''
+
         })
-        // Lấy ds huyện theo id tỉnh
-        getListDistricByProvinceId(value)
+        getLstDistricByProvinceId(value);
+    }
+
+    // Lấy ds huyện theo id Tỉnh
+    const getLstDistricByProvinceId = (id) => {
+        getListDistricByProvinceId(id)
         .then(response => {
             let list = [];
             response.forEach(item => {
@@ -143,6 +153,20 @@ const FormUser = (props) => {
         })
     }
 
+    const getLstWardByDistrictId = (id) => {
+        getListWardbyDistrictId(id)
+        .then(response => {
+            let list = [];
+            response.forEach(item => {
+                let customItem = {};
+                customItem = {...item, id: item.id, title: item.name}
+                list = [...list, customItem];
+            })
+            setLstWards(list);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container style={{ width: '700px' }}>

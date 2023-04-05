@@ -168,7 +168,7 @@ const ManageCustomer = () => {
                                         <TableCell>{item.customer_code}</TableCell>
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.gender}</TableCell>
+                                        <TableCell>{item.gender !== null ? item.gender === false ? 'Nam': 'Nữ' : ''}</TableCell>
                                         <TableCell>{item.date}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>{item.type}</TableCell>

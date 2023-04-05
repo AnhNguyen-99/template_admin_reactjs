@@ -81,6 +81,11 @@ export function getListCustomer() {
 
 // Tạo mới khách hàng
 export function createCustomer(customer) {
+    const date = (new Intl.DateTimeFormat('en-US').format(new Date(customer.date))).split("/");
+    const date1Str = date[0] < 10 ? '0' + date[0] : date[0];
+    const date2Str = date[1] < 10 ? '0' + date[1] : date[1];
+    const date3Str = date[2] < 10 ? '0' + date[2] : date[2];
+    const dateStr = date3Str + '-' + date1Str + '-' + date2Str;
     var raw = JSON.stringify({
         'username': customer.username,
         'customer_code': customer.customer_code,
@@ -88,14 +93,14 @@ export function createCustomer(customer) {
         'phone': customer.phone,
         'email': customer.email,
         'gender': customer.gender,
-        'date': customer.date,
+        'date': dateStr,
         'address': customer.address,
         'province': customer.province,
         'district': customer.district,
         'wards': customer.wards,
         'type': customer.type,
         'company_name': customer.company_name,
-        'image': customer.image
+        // 'image': customer.image
     })
 
     return request({
@@ -108,14 +113,19 @@ export function createCustomer(customer) {
 
 // Cập nhật Customer
 export function updateCustomer(customer) {
+    const date = (new Intl.DateTimeFormat('en-US').format(new Date(customer.date))).split("/");
+    const date1Str = date[0] < 10 ? '0' + date[0] : date[0];
+    const date2Str = date[1] < 10 ? '0' + date[1] : date[1];
+    const date3Str = date[2] < 10 ? '0' + date[2] : date[2];
+    const dateStr = date3Str + '-' + date1Str + '-' + date2Str;
     var raw = JSON.stringify({
         'username': customer.username,
         'customer_code': customer.customer_code,
         'code_tax': customer.code_tax,
         'phone': customer.phone,
         'email': customer.email,
-        'gender': customer.gender,
-        'date': new Date(customer.date),
+        'gender': customer.gender === 0 ? true : false,
+        'date': dateStr,
         'address': customer.address,
         'province': customer.province,
         'district': customer.district,
@@ -152,19 +162,25 @@ export function deleteCustomer(customer) {
 
 // Tạo mới danh sách user
 export function createUser(user) {
+    const date = (new Intl.DateTimeFormat('en-US').format(new Date(user.date))).split("/");
+    const date1Str = date[0] < 10 ? '0' + date[0] : date[0];
+    const date2Str = date[1] < 10 ? '0' + date[1] : date[1];
+    const date3Str = date[2] < 10 ? '0' + date[2] : date[2];
+
+    const dateStr = date3Str + '-' + date1Str + '-' + date2Str;
     var raw = JSON.stringify({
         'username': user.username,
         'code': user.code,
         'phone': user.phone,
         'email': user.email,
         'gender': user.gender,
-        'date': user.date,
+        'date': dateStr,
         'address': user.address,
         'province': user.province,
         'district': user.district,
         'wards': user.wards,
         'note': user.note,
-        'image': user.image
+        // 'image': user.image,
     })
 
     return request({
@@ -189,7 +205,7 @@ export function updateUser(user) {
     const date1Str = date[0] < 10 ? '0' + date[0] : date[0];
     const date2Str = date[1] < 10 ? '0' + date[1] : date[1];
     const date3Str = date[2] < 10 ? '0' + date[2] : date[2];
-    const dateStr = date3Str + '-' + date2Str + '-' + date1Str;
+    const dateStr = date3Str + '-' + date1Str + '-' + date2Str;
     var raw = JSON.stringify({
         'username': user.username,
         'code': user.code,
@@ -202,8 +218,8 @@ export function updateUser(user) {
         'district': user.district,
         'wards': user.wards,
         'note': user.note,
-        'image': user.image,
-        'password': '123456'
+        // 'image': user.image,
+        'password': user.password
     });
 
     return request({
