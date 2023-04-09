@@ -36,19 +36,9 @@ const ManageCategory = () => {
     
     const classes = useStyles();
 
-    // const data = [
-    //     {
-    //         'id': 1,
-    //         'categoryName': 'Danh mục 1'
-    //     },
-    //     {
-    //         'id': 2,
-    //         'categoryName': 'Danh mục 2'
-    //     }
-    // ]
-
     const headCells = [
         { id: 'id', label: 'STT' },
+        { id: 'code', label: 'CodeCategory' },
         { id: 'categoryName', label: 'CategoryName' },
         { id: 'subCategory', label: 'SubCategory'},
         { id: 'actions', label: 'Actions', disableSorting: true }
@@ -174,8 +164,9 @@ const ManageCategory = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{item.code}</TableCell>
                                         <TableCell>{item.category_name}</TableCell>
-                                        <TableCell>{item.sub_category}</TableCell>
+                                        <TableCell>{item.parent_id === null ? 'False' : 'True'}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"

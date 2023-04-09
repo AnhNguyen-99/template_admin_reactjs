@@ -11,12 +11,14 @@ import useTable from 'ui-component/useTable';
 import Controls from 'ui-component/controls/Controls';
 import { makeStyles } from '@mui/styles';
 // ===============================|| Dialog ||================================= //
-import { IconEdit, IconTrash, IconSearch } from '@tabler/icons';
+import { IconEdit, IconSearch } from '@tabler/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
+import { createFunction, updateFunction } from 'services/AccountService';
 import { showNotification } from 'services/NotificationService';
-import { getListUser, createUser, deleteUser, updateUser } from 'services/AccountService';
-import FormUser from './FormUser';
+import { getListOrder } from 'services/OrdersService';
+import ViewOrderItem from './VierwOrderItem';
+
 const useStyles = makeStyles(theme => ({
     pageContent: {
         margin: theme.spacing(5),
@@ -31,19 +33,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ManageUser = () => {
+const ManageOrders = () => {
 
     const classes = useStyles();
 
     const headCells = [
         { id: 'id', label: 'STT' },
-        { id: 'username', label: 'NameEmployee' },
-        { id: 'code', label: 'EmployeeCode'},
-        { id: 'email', label: 'Email'},
-        { id: 'phone', label: 'Phone'},
-        { id: 'gender', label: 'Gender'},
-        { id: 'date', label: 'Date'},
-        { id: 'address', label: 'Address'},
+        { id: 'code', label: 'Code' },
+        { id: 'customerId', label: 'Customer' },
+        { id: 'phone', label: 'Phone' },
+        { id: 'address', label: 'Address' },
+        { id: 'total', label: 'Total' },
+        { id: 'status', label: 'Status' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
 
@@ -52,23 +53,26 @@ const ManageUser = () => {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
     const [records, setRecords] = useState([])
 
-    const addOrEdit = (user, resetForm) => {
-        const dateBirth = new Date(user.date);
-        user.date = dateBirth;
-        console.log(user)
-        if (user.id) {
-            updateUser(user).then(response => {
+    const addOrEdit = (functions, resetForm) => {
+        if (functions.id) {
+            // Update function
+            updateFunction(functions).then(response => {
                 if (response !== null) {
-                    showNotification("Update User Success", 'success');
+                    showNotification('Update Function Success', 'success');
                     getData();
                 }
             }).catch(error => {
-                showNotification("Update User Fail", 'danger');
-            })
+                showNotification('Update Function Fail', 'danger');
+            });
         } else {
-            createUser(user)
-            .then(response => {
-                showNotification("Create User Success", 'success');
+            // Thêm mới function
+            createFunction(functions.name_function).then(response => {
+                if (response !== null) {
+                    showNotification('Create Function Success', 'success');
+                    getData();
+                }
+            }).catch(error => {
+                showNotification('Create Function Fail', 'danger');
             });
         }
         resetForm()
@@ -84,20 +88,7 @@ const ManageUser = () => {
     } = useTable(records, headCells, filterFn);
 
     const openInPopup = (item) => {
-        // Set lại giá trị giới tính cho popup cập nhật
-        if (item.gender !== null) {
-            if(item.gender !== ''){
-                if (item.gender === false){
-                    item.gender = 0;
-                }else if (item.gender === true){
-                    item.gender = 1;
-                }
-            }else {
-                item.gender = '';
-            }
-        }else {
-            item.gender = '';
-        }
+        console.log(item);
         setRecordForEdit(item);
         setOpen(true);
     }
@@ -107,12 +98,10 @@ const ManageUser = () => {
         setFilterFn({
             fn: items => {
                 if (target.value == "") {
-                    console.log(items);
                     return items;
                 }
-                else{
-                    return items.filter(x => x.username.toLowerCase().includes(target.value.toLowerCase()))
-                }
+                else
+                    return items.filter(x => x.code.toLowerCase().includes(target.value.toLowerCase()))
             }
         })
     }
@@ -122,7 +111,7 @@ const ManageUser = () => {
     }, [])
 
     const getData = () => {
-        getListUser()
+        getListOrder()
             .then(response => {
                 setRecords(response);
             }).catch(error => {
@@ -130,46 +119,17 @@ const ManageUser = () => {
             });
     };
 
-    const deleteUsers = (item) => {
-        deleteUser(item).then(response => {
-            if (response !== null) {
-                showNotification("Delete User Success", 'success');
-                getData();
-            }
-        }).catch(error => {
-            console.log(error);
-            showNotification("Delete User Fail", 'danger');
-        });
-    }
-
-    const convertDateTime = (dateTime) => {
-        const date = new Date(dateTime);
-        return date.toISOString().split('T')[0];
-    }
-
-    const viewGender = (gender) => {
-        if (gender !== null) {
-            if(gender !== ''){
-                if(gender === false) {
-                    return 'Nam';
-                }else if(gender === true) {
-                    return 'Nữ';
-                }else if (gender === 0){
-                    return 'Nam';
-                }else {
-                    return 'Nữ'
-                }
-            }else {
-                return '';
-            }
-        }else {
-            return '';
-        }
+    const converToPrice = (price) => {
+        return new Intl.NumberFormat('it-IT', {
+            style: 'currency',
+            currency: 'VND'
+          }).format(price);
+        
     }
 
     return (
         <>
-            <MainCard title="List Employee">
+            <MainCard title="List Function">
                 <Toolbar>
                     <Controls.Input
                         label="Search"
@@ -182,16 +142,9 @@ const ManageUser = () => {
                         }}
                         onChange={handleSearch}
                     />
-                    <Controls.Button
-                        text="Add New"
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        className={classes.newButton}
-                        onClick={() => { setOpen(true); setRecordForEdit(null); }}
-                    />
                 </Toolbar>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item xs={12} style={{overflow: 'auto'}}>
+                    <Grid item xs={12}>
                         {/* === Table === */}
                         <TblContainer>
                             <TblHead />
@@ -200,25 +153,18 @@ const ManageUser = () => {
                                     recordsAfterPagingAndSorting().map((item, index) =>
                                     (<TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{item.username}</TableCell>
                                         <TableCell>{item.code}</TableCell>
-                                        <TableCell>{item.email}</TableCell>
+                                        <TableCell>{item.customer}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{viewGender(item.gender)}</TableCell>
-                                        <TableCell>{item.date !== null ? convertDateTime(item.date) : ''}</TableCell>
                                         <TableCell>{item.address}</TableCell>
+                                        <TableCell>{converToPrice(item.total_price)}</TableCell>
+                                        <TableCell>{item.status === false ? 'Pending' : 'Approved'}</TableCell>
                                         <TableCell>
                                             <Controls.ActionButton
                                                 color="primary"
                                                 onClick={() => { openInPopup(item) }}
                                             >
                                                 <IconEdit />
-                                            </Controls.ActionButton>
-                                            <Controls.ActionButton
-                                                color="secondary"
-                                                onClick = {() => { deleteUsers(item) }}
-                                            >
-                                                <IconTrash color='red' />
                                             </Controls.ActionButton>
                                         </TableCell>
                                     </TableRow>)
@@ -230,12 +176,12 @@ const ManageUser = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Employee" openPopup={open} setOpenPopup={setOpen}>
-                <FormUser recordForEdit={recordForEdit}
+            <Popup title="List OrderDetail" openPopup={open} setOpenPopup={setOpen}>
+                <ViewOrderItem recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>
         </>
     );
 };
 
-export default ManageUser;
+export default ManageOrders;

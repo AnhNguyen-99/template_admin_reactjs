@@ -26,6 +26,7 @@ const ManageEmployee = Loadable(lazy(() => import('views/manages/user/ListUser')
 const ManageProduct = Loadable(lazy(() => import('views/manages/product/ListProduct')));
 const ManageSales = Loadable(lazy(() => import('views/manages/sales/ListSales')));
 const ImportWarehouse = Loadable(lazy(() => import('views/manages/warehouse/ListWarehouse')));
+const ManagesOrders = Loadable(lazy(() => import('views/manages/orders/ListOrders')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -137,6 +138,10 @@ const MainRoutes = {
                 {
                     path: 'sales',
                     element: <ManageSales />
+                },
+                {
+                    path: 'orders',
+                    element: <ManagesOrders />
                 }
             ]
         }

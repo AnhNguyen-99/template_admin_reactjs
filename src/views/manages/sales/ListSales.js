@@ -213,7 +213,7 @@ const ManageSales = () => {
                     </Grid>
                 </Grid>
             </MainCard>
-            <Popup title="Create Supplier" openPopup={open} setOpenPopup={setOpen}>
+            <Popup title="Create Sale" openPopup={open} setOpenPopup={setOpen}>
                 <FormSale recordForEdit={recordForEdit}
                     addOrEdit={addOrEdit} />
             </Popup>

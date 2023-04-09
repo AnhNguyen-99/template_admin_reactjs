@@ -69,6 +69,7 @@ const FormCustomer = (props) => {
 
     useEffect(() => {
         getListProvinces();
+        console.log(recordForEdit);
         if (recordForEdit !== null){
             getLstDistricByProvinceId(recordForEdit.province);
             getLstWardByDistrictId(recordForEdit.district);
@@ -95,6 +96,7 @@ const FormCustomer = (props) => {
     }
 
     const handleChangeProvince = (event) => {
+        console.log(event)
         const {
             target: { value },
         } = event;
@@ -177,9 +179,9 @@ const FormCustomer = (props) => {
                     <Controls.Input
                         name="customer_code"
                         label="CustomerCode"
-                        value={values.customer_tax}
+                        value={values.customer_code}
                         onChange={handleInputChange}
-                        error={errors.customer_tax}
+                        error={errors.customer_code}
                     />
                     <Controls.RadioGroup
                         name="gender"

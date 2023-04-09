@@ -84,6 +84,7 @@ const ManageWarehouse = () => {
 
     const openInPopup = (item) => {
         console.log(item);
+        item.supplier = item.supplier_id;
         setRecordForEdit(item);
         setOpen(true);
     }

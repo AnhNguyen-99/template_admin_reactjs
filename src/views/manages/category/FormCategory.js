@@ -9,7 +9,8 @@ const FormCategory = (props) => {
     
     const initialFValues = {
         category_name: '',
-        sub_category: ''
+        parent_id: '',
+        code: ''
     }
     const { addOrEdit, recordForEdit } = props
 
@@ -45,14 +46,14 @@ const FormCategory = (props) => {
     }
 
     useEffect(() => {
-        handleChangeCategory();
+        getAllCategory();
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit
             })
     }, [recordForEdit])
 
-    const handleChangeCategory = () => {
+    const getAllCategory = () => {
         getlistCategory().
         then(response => {
             let list = [];
@@ -66,25 +67,43 @@ const FormCategory = (props) => {
             console.log(error)
         });
     }
+    const handleChangeCategory = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setValues({
+            ...values,
+            parent_id: value
+        })
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Grid container style={{ width: '500px'}}>
-                <Grid item xs={12} style={{textAlign: 'center', marginBottom: '15px'}}>
-                    <Controls.Select
-                        options={lstCategory}
+                <Grid item xs={12} style={{marginBottom: '15px'}}>
+                    {/* Code */}
+                    <Controls.Input
+                        label="Code Category"
+                        name="code"
+                        value={values.code}
+                        onChange={handleInputChange}
+                        error={errors.code}
+                    />
+                    {/* CategoryName */}
+                    <Controls.Input
+                        label="Category Name"
                         name="category_name"
-                        label="CategoryName"
                         value={values.category_name}
-                        onChange={handleChangeCategory}
+                        onChange={handleInputChange}
                         error={errors.category_name}
                     />
-                    <Controls.Input
-                        label="SubCategory"
-                        name="sub_category"
-                        value={values.sub_category}
-                        onChange={handleInputChange}
-                        error={errors.sub_category}
+                    <Controls.Select
+                        options={lstCategory}
+                        name="parent_id"
+                        label="ParentId"
+                        value={values.parent_id}
+                        onChange={handleChangeCategory}
+                        error={errors.parent_id}
                     />
                 </Grid>
                 <Grid item xs={12} style={{textAlign: 'right'}}>

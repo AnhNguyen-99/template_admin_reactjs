@@ -85,8 +85,20 @@ const ManageCustomer = () => {
     } = useTable(records, headCells, filterFn);
 
     const openInPopup = (item) => {
-        console.log(item);
-        item.gender = item.gender !== null ? item.gender === false ? 0 : 1 : '';
+        // Set giá giới tính cho popup cập nhật
+        if (item.gender !== null) {
+            if(item.gender !== ''){
+                if (item.gender === false){
+                    item.gender = 0;
+                }else if (item.gender === true){
+                    item.gender = 1;
+                }
+            }else {
+                item.gender = '';
+            }
+        }else {
+            item.gender = '';
+        }
         setRecordForEdit(item);
         setOpen(true);
     }
@@ -131,6 +143,26 @@ const ManageCustomer = () => {
         });
     }
 
+    const viewGender = (gender) => {
+        if (gender !== null) {
+            if(gender !== ''){
+                if(gender === false) {
+                    return 'Nam';
+                }else if(gender === true) {
+                    return 'Nữ';
+                }else if (gender === 0){
+                    return 'Nam';
+                }else {
+                    return 'Nữ'
+                }
+            }else {
+                return '';
+            }
+        }else {
+            return '';
+        }
+    }
+
     return (
         <>
             <MainCard title="List Customer">
@@ -168,7 +200,7 @@ const ManageCustomer = () => {
                                         <TableCell>{item.customer_code}</TableCell>
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
-                                        <TableCell>{item.gender !== null ? item.gender === false ? 'Nam': 'Nữ' : ''}</TableCell>
+                                        <TableCell>{viewGender(item.gender)}</TableCell>
                                         <TableCell>{item.date}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>{item.type}</TableCell>

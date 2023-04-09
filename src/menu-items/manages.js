@@ -122,6 +122,14 @@ const manages = {
             url: '/manage/sales',
             icon: icons.IconDiscount,
             breadcrumbs: true
+        },
+        {
+            id: 'manage_orders',
+            title: "Manage Orders",
+            type: 'item',
+            url: '/manage/orders',
+            icon: icons.IconDiscount,
+            breadcrumbs: true
         }
     ]
 };

@@ -9,7 +9,6 @@ const request = (options) => {
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-    console.log(options);
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
@@ -29,7 +28,8 @@ const request = (options) => {
 export function createCategory(category) {
     var raw = JSON.stringify({
         "category_name": category.category_name,
-        "sub_category": category.sub_category,
+        "code": category.code,
+        "parent_id": category.parent_id
     });
 
     return request({
@@ -61,7 +61,8 @@ export function deleteCategory(category) {
 export function updateCategory(category) {
     var raw = JSON.stringify({
         'category_name': category.category_name,
-        'sub_category': category.sub_category,
+        'code': category.code,
+        'parent_id': category.parent_id,
         'create_id': 1,
         'update_id': 1,
     });
